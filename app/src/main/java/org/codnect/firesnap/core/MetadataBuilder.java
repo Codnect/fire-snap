@@ -21,7 +21,12 @@ public class MetadataBuilder {
      * Create metadata from metadata sources
      */
     public void build() {
-
+        /* get the managed resources */
+        ManagedResources managedResources = prepareManagedResources();
+        /* process the metadata sources */
+        MetadataSourceProcessor processor = new AnnotationMetadataProcessor(managedResources);
+        processor.prepare();
+        processor.process();
     }
 
     /**
