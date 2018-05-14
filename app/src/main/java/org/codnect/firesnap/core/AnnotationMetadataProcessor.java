@@ -21,11 +21,16 @@ public class AnnotationMetadataProcessor implements MetadataSourceProcessor {
     private ManagedResources managedResources;
     private List<Class> categorizedClasses;
 
+
     public AnnotationMetadataProcessor(ManagedResources managedResources) {
         this.managedResources = managedResources;
         categorizedClasses = new ArrayList<>();
     }
 
+    /**
+     * Prepare the sources to create metadata from the annotation
+     * metadata.
+     */
     @Override
     public void prepare() {
 
@@ -36,8 +41,12 @@ public class AnnotationMetadataProcessor implements MetadataSourceProcessor {
 
     }
 
+    /**
+     * Process the annotations of the annotated classes.
+     */
     @Override
     public void process() {
+
 
     }
 
