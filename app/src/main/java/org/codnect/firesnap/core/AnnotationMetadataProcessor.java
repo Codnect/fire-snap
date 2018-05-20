@@ -3,6 +3,7 @@ package org.codnect.firesnap.core;
 import android.util.Log;
 
 import org.codnect.firesnap.annotation.Model;
+import org.codnect.firesnap.binder.AnnotationBinder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +19,13 @@ public class AnnotationMetadataProcessor implements MetadataSourceProcessor {
 
     private static final String LOG_TAG = AnnotationMetadataProcessor.class.getSimpleName();
 
+    private MetadataContext metadataContext;
     private ManagedResources managedResources;
     private List<Class> categorizedClasses;
 
 
-    public AnnotationMetadataProcessor(ManagedResources managedResources) {
+    public AnnotationMetadataProcessor(MetadataContext metadataContext, ManagedResources managedResources) {
+        this.metadataContext = metadataContext;
         this.managedResources = managedResources;
         categorizedClasses = new ArrayList<>();
     }
@@ -47,6 +50,10 @@ public class AnnotationMetadataProcessor implements MetadataSourceProcessor {
     @Override
     public void process() {
 
+        /* bind the classes */
+        for(Class categorizedClass : categorizedClasses) {
+            AnnotationBinder.bindClass(categorizedClass, metadataContext);
+        }
 
     }
 
