@@ -1,5 +1,7 @@
 package org.codnect.firesnap.core;
 
+import org.codnect.firesnap.reflection.ReflectionManager;
+
 /**
  * Created by Burak Koken on 20.5.2018.
  *
@@ -8,9 +10,11 @@ package org.codnect.firesnap.core;
 public class MetadataContext {
 
     private MetadataCollector metadataCollector;
+    private ReflectionManager reflectionManager;
 
     public MetadataContext(MetadataCollector metadataCollector) {
         this.metadataCollector = metadataCollector;
+        this.reflectionManager = new ReflectionManager();
     }
 
     /**
@@ -29,6 +33,22 @@ public class MetadataContext {
      */
     public void setMetadataCollector(MetadataCollector metadataCollector) {
         this.metadataCollector = metadataCollector;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public ReflectionManager getReflectionManager() {
+        return reflectionManager;
+    }
+
+    /**
+     *
+     * @param reflectionManager
+     */
+    public void setReflectionManager(ReflectionManager reflectionManager) {
+        this.reflectionManager = reflectionManager;
     }
 
 }

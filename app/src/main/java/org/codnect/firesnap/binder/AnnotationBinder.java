@@ -5,6 +5,7 @@ import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.exception.AnnotationException;
 import org.codnect.firesnap.mapping.PersistenceClass;
+import org.codnect.firesnap.reflection.XClass;
 
 /**
  * Created by Burak Koken on 14.5.2018.
@@ -18,11 +19,11 @@ public class AnnotationBinder {
      *
      * @param xClass annotated class
      */
-    public static void bindClass(Class xClass, MetadataContext metadataContext) {
+    public static void bindClass(XClass xClass, MetadataContext metadataContext) {
 
         if(isModelClassType(xClass)) {
             PersistenceClass persistenceClass = new PersistenceClass();
-            Model modelAnnotation = (Model) xClass.getAnnotation(Model.class);
+            Model modelAnnotation = xClass.getAnnotation(Model.class);
             ModelBinder modelBinder = new ModelBinder(xClass, modelAnnotation, persistenceClass, metadataContext);
             modelBinder.bindModel();
 
@@ -40,7 +41,7 @@ public class AnnotationBinder {
      * @return if the annotated class is a Model class, it returns
      *         true. Otherwise it returns false.
      */
-    public static boolean isModelClassType(Class xClass) {
+    public static boolean isModelClassType(XClass xClass) {
 
         if(!xClass.isAnnotationPresent(Embeddable.class)) {
             if(!xClass.isAnnotationPresent(Model.class)) {

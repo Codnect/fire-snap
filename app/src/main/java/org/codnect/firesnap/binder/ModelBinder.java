@@ -3,6 +3,7 @@ package org.codnect.firesnap.binder;
 import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.mapping.PersistenceClass;
+import org.codnect.firesnap.reflection.XClass;
 
 /**
  * Created by Burak Koken on 14.5.2018.
@@ -11,12 +12,12 @@ import org.codnect.firesnap.mapping.PersistenceClass;
  */
 public class ModelBinder {
 
-    private Class annotatedClass;
+    private XClass annotatedClass;
     private Model modelAnnotation;
     private MetadataContext metadataContext;
     private PersistenceClass persistenceClass;
 
-    public ModelBinder(Class annotatedClass, Model modelAnnotation, PersistenceClass persistenceClass,
+    public ModelBinder(XClass annotatedClass, Model modelAnnotation, PersistenceClass persistenceClass,
                        MetadataContext metadataContext) {
         this.annotatedClass = annotatedClass;
         this.modelAnnotation = modelAnnotation;

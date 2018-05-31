@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.binder.AnnotationBinder;
+import org.codnect.firesnap.reflection.XClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,7 @@ public class AnnotationMetadataProcessor implements MetadataSourceProcessor {
 
     private MetadataContext metadataContext;
     private ManagedResources managedResources;
-    private List<Class> categorizedClasses;
-
+    private List<XClass> categorizedClasses;
 
     public AnnotationMetadataProcessor(MetadataContext metadataContext, ManagedResources managedResources) {
         this.metadataContext = metadataContext;
@@ -51,7 +51,7 @@ public class AnnotationMetadataProcessor implements MetadataSourceProcessor {
     public void process() {
 
         /* bind the classes */
-        for(Class categorizedClass : categorizedClasses) {
+        for(XClass categorizedClass : categorizedClasses) {
             AnnotationBinder.bindClass(categorizedClass, metadataContext);
         }
 
@@ -63,9 +63,10 @@ public class AnnotationMetadataProcessor implements MetadataSourceProcessor {
      * @param annotatedClass annotated class
      */
     private void categorizeAnnotatedClass(Class annotatedClass) {
+        XClass xClass = metadataContext.getReflectionManager().toXClass(annotatedClass);
 
         if (annotatedClass.isAnnotationPresent(Model.class)) {
-            categorizedClasses.add(annotatedClass);
+            categorizedClasses.add(xClass);
         } else {
             Log.w(LOG_TAG, "Encountered a non-categorized annotated class [" + annotatedClass.getName() + "]");
         }
