@@ -2,8 +2,6 @@ package org.codnect.firesnap.scan;
 
 import org.codnect.firesnap.core.ManagedResources;
 import org.codnect.firesnap.core.MetadataSources;
-import org.codnect.firesnap.model.AnnotatedTestModel;
-import org.codnect.firesnap.model.NonAnnotatedTestModel;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

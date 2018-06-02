@@ -98,8 +98,8 @@ public class ReflectionManager {
      */
     public XProperty getXProperty(Member member) {
 
-        if(!(member instanceof Field) || !(member instanceof Method)) {
-            throw new IllegalArgumentException("The member should be a Field or Method instance for XMethod");
+        if(!(member instanceof Field) && !(member instanceof Method)) {
+            throw new IllegalArgumentException("The member should be a Field or Method instance for XProperty");
         }
 
         return new XProperty(member);

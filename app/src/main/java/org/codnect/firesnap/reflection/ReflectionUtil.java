@@ -43,6 +43,7 @@ public class ReflectionUtil {
                 !method.isSynthetic() &&
                 !method.isBridge() &&
                 !Modifier.isStatic(method.getModifiers()) &&
+                !void.class.equals(method.getReturnType()) &&
                 (method.getName().startsWith("get") || method.getName().startsWith("is"));
     }
 
@@ -72,12 +73,12 @@ public class ReflectionUtil {
      */
     public static String decapitalize(String propertyName) {
         if (propertyName != null && propertyName.length() != 0) {
-            return propertyName;
+            char[] chars = propertyName.toCharArray();
+            chars[0] = Character.toLowerCase(chars[0]);
+            return new String(chars);
         }
 
-        char[] chars = propertyName.toCharArray();
-        chars[0] = Character.toLowerCase(chars[0]);
-        return new String(chars);
+        return propertyName;
     }
 
 }

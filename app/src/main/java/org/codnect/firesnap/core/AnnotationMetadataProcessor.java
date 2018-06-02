@@ -63,7 +63,7 @@ public class AnnotationMetadataProcessor implements MetadataSourceProcessor {
      * @param annotatedClass annotated class
      */
     private void categorizeAnnotatedClass(Class annotatedClass) {
-        XClass xClass = metadataContext.getReflectionManager().toXClass(annotatedClass);
+        XClass xClass = metadataContext.getReflectionManager().getXClass(annotatedClass);
 
         if (annotatedClass.isAnnotationPresent(Model.class)) {
             categorizedClasses.add(xClass);
