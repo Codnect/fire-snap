@@ -1,5 +1,6 @@
 package org.codnect.firesnap.reflection;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 
 /**
@@ -34,28 +35,69 @@ public class XField extends XMember {
     }
 
     /**
-     * Invokes the field.
+     * Get the field value.
      *
-     * @param target the field object
+     * @param object the field object
      * @return if this object is a field instance, this method
      * returns the field value.
      */
-    @Override
-    public Object invoke(Object target) {
-        return null;
+    public Object get(Object object) {
+        Field field = (Field) getMember();
+        Class type = field.getType();
+        Object value = null;
+
+        try {
+
+            if(type.isPrimitive()) {
+
+                /**
+                 * Reflection API has a bug.
+                 * See https://bugs.openjdk.java.net/browse/JDK-5043030 for details.
+                 */
+                if(type == Boolean.TYPE) {
+                    return Boolean.valueOf(field.getBoolean(object));
+                } else if(type == Byte.TYPE) {
+                    return Byte.valueOf(field.getByte(object));
+                } else if(type == Character.TYPE) {
+                    return Character.valueOf(field.getChar(object));
+                } else if(type == Short.TYPE) {
+                    return Short.valueOf(field.getShort(object));
+                } else if(type == Integer.TYPE) {
+                    return Integer.valueOf(field.getInt(object));
+                } else if(type == Long.TYPE) {
+                    return Long.valueOf(field.getLong(object));
+                }
+
+            } else {
+                value = field.get(object);
+            }
+
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Getting " + getName() + " on a null object", e);
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to get " + getName());
+        }
+
+        return value;
     }
 
     /**
-     * Invokes the field.
+     * Set the field value.
      *
-     * @param target the field object
-     * @param parameters parameters to pass
-     * @return if this object is a field instance, this method
-     * returns the field value.
+     * @param object the field object
+     * @param value field value
      */
-    @Override
-    public Object invoke(Object target, Object... parameters) {
-        return null;
+    public void set(Object object, Object value) {
+        Field field = (Field) getMember();
+
+        try {
+            field.set(object, value);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Setting " + getName() + " on a null object", e);
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to set " + getName());
+        }
+
     }
 
 }

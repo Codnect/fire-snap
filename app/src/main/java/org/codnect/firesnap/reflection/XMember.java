@@ -43,26 +43,4 @@ public abstract class XMember extends XAnnotatedElement{
         return getMember().getModifiers();
     }
 
-    /**
-     * Invokes the field or method.
-     *
-     * @param target field's or method's itself
-     * @return if this object is a field instance, this method
-     * returns the field value. Otherwise, it invokes the
-     * method and returns method return value.
-     */
-    public abstract Object invoke(Object target);
-
-
-    /**
-     * Invokes the field.
-     *
-     * @param target field's itself
-     * @param parameters parameters to pass
-     * @return if this object is a field instance, this method
-     * returns the field value. Otherwise, it invokes the
-     * method and returns method return value.
-     */
-    public abstract Object invoke(Object target, Object... parameters);
-
 }

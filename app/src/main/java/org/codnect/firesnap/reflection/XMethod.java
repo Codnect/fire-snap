@@ -1,6 +1,8 @@
 package org.codnect.firesnap.reflection;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 
 /**
  * Created by Burak Koken on 24.5.2018.
@@ -37,26 +39,48 @@ public class XMethod extends XMember {
     /**
      * Invokes the method.
      *
-     * @param target the method object
+     * @param object the method object
      * @return if this object is a method instance, it
      * invokes the method and returns method return value.
      */
-    @Override
-    public Object invoke(Object target) {
-        return null;
+    public Object invoke(Object object) {
+        Object value = null;
+
+        try {
+            value =  ((Method) getMember()).invoke(object, new Object[0]);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invoking " + getName() + " on a null object", e);
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException("Invoking " + getName() + " with wrong parameters", e );
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to invoke " + getName(), e);
+        }
+
+        return value;
     }
 
     /**
      * Invokes the method.
      *
-     * @param target the method object
+     * @param object the method object
      * @param parameters parameters to pass
      * @return if this object is a method instance, it
      * invokes the method and returns method return value.
      */
-    @Override
-    public Object invoke(Object target, Object... parameters) {
-        return null;
+    public Object invoke(Object object, Object... parameters) {
+        Object value = null;
+
+        try {
+            value =  ((Method) getMember()).invoke(object, parameters);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invoking " + getName() + " on a null object", e);
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException("Invoking " + getName() + " with wrong parameters", e );
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to invoke " + getName(), e);
+        }
+
+        return value;
     }
 
 }
