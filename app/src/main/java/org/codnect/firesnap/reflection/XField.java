@@ -1,7 +1,11 @@
 package org.codnect.firesnap.reflection;
 
+import org.codnect.firesnap.reflection.binder.TypeBinder;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
 /**
  * Created by Burak Koken on 24.5.2018.
@@ -10,8 +14,28 @@ import java.lang.reflect.Member;
  */
 public class XField extends XMember {
 
-    protected XField(Member member) {
-        super(member);
+    private XField(Member member,
+                   Type type,
+                   XType xType,
+                   TypeBinder typeBinder,
+                   ReflectionManager reflectionManager) {
+        super(member, type, xType, typeBinder, reflectionManager);
+    }
+
+    /**
+     *
+     * @param member
+     * @param typeBinder
+     * @param reflectionManager
+     * @return
+     */
+    public static XField create(Member member, TypeBinder typeBinder, ReflectionManager reflectionManager) {
+        if(!(member instanceof Field)) {
+            throw new IllegalArgumentException("The member should be a Field instance for XField");
+        }
+        Type type = typeBinder.bind(((Field)member).getGenericType());
+        XType xType = reflectionManager.getXType(typeBinder, type);
+        return new XField(member, type, xType, typeBinder, reflectionManager);
     }
 
     /**

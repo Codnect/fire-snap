@@ -1,10 +1,12 @@
 package org.codnect.firesnap.reflection;
 
 import org.codnect.firesnap.exception.MappingException;
+import org.codnect.firesnap.reflection.binder.TypeBinder;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
 /**
  * Created by Burak Koken on 24.5.2018.
@@ -13,8 +15,33 @@ import java.lang.reflect.Method;
  */
 public class XProperty extends XMember {
 
-    protected XProperty(Member member) {
-        super(member);
+    private XProperty(Member member,
+                        Type type,
+                        XType xType,
+                        TypeBinder typeBinder,
+                        ReflectionManager reflectionManager) {
+        super(member, type, xType, typeBinder, reflectionManager);
+    }
+
+    /**
+     *
+     * @param member
+     * @param typeBinder
+     * @param reflectionManager
+     * @return
+     */
+    public static XProperty create(Member member, TypeBinder typeBinder, ReflectionManager reflectionManager) {
+        if(!(member instanceof Field) && !(member instanceof Method)) {
+            throw new IllegalArgumentException("The member should be a Field or Method instance for XProperty");
+        }
+        Type type = null;
+        if(member instanceof Field) {
+            typeBinder.bind(((Field)member).getGenericType());
+        } else {
+            typeBinder.bind(((Method)member).getGenericReturnType());
+        }
+        XType xType = reflectionManager.getXType(typeBinder, type);
+        return new XProperty(member, type, xType, typeBinder, reflectionManager);
     }
 
     /**

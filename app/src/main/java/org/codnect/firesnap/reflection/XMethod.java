@@ -1,8 +1,10 @@
 package org.codnect.firesnap.reflection;
 
-import java.lang.reflect.InvocationTargetException;
+import org.codnect.firesnap.reflection.binder.TypeBinder;
+
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
 /**
  * Created by Burak Koken on 24.5.2018.
@@ -11,8 +13,28 @@ import java.lang.reflect.Method;
  */
 public class XMethod extends XMember {
 
-    protected XMethod(Member member) {
-        super(member);
+    private XMethod(Member member,
+                    Type type,
+                    XType xType,
+                    TypeBinder typeBinder,
+                    ReflectionManager reflectionManager) {
+        super(member, type, xType, typeBinder, reflectionManager);
+    }
+
+    /**
+     *
+     * @param member
+     * @param typeBinder
+     * @param reflectionManager
+     * @return
+     */
+    public static XMethod create(Member member, TypeBinder typeBinder, ReflectionManager reflectionManager) {
+        if(!(member instanceof Method)) {
+            throw new IllegalArgumentException("The member should be a Method instance for XMethod");
+        }
+        Type type = typeBinder.bind(((Method)member).getGenericReturnType());
+        XType xType = reflectionManager.getXType(typeBinder, type);
+        return new XMethod(member, type, xType, typeBinder, reflectionManager);
     }
 
     /**

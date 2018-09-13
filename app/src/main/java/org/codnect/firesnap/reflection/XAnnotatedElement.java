@@ -11,9 +11,11 @@ import java.lang.reflect.AnnotatedElement;
 public class XAnnotatedElement implements AnnotatedElement {
 
     private AnnotatedElement annotatedElement;
+    private ReflectionManager reflectionManager;
 
-    public XAnnotatedElement(AnnotatedElement annotatedElement) {
+    protected XAnnotatedElement(AnnotatedElement annotatedElement, ReflectionManager reflectionManager) {
         this.annotatedElement = annotatedElement;
+        this.reflectionManager = reflectionManager;
     }
 
     /**
@@ -91,6 +93,14 @@ public class XAnnotatedElement implements AnnotatedElement {
 
         XAnnotatedElement xAnnotatedElement = (XAnnotatedElement) obj;
         return annotatedElement.equals(xAnnotatedElement.toAnnotatedElement());
+    }
+
+    /**
+     *
+     * @return
+     */
+    public ReflectionManager getReflectionManager() {
+        return reflectionManager;
     }
 
     /**

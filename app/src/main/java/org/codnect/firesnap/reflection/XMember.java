@@ -1,5 +1,7 @@
 package org.codnect.firesnap.reflection;
 
+import org.codnect.firesnap.reflection.binder.TypeBinder;
+
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Member;
 import java.lang.reflect.Type;
@@ -13,9 +15,17 @@ public abstract class XMember extends XAnnotatedElement{
 
     private Type type;
     private XType xType;
+    private TypeBinder typeBinder;
 
-    public XMember(Member member) {
-        super((AnnotatedElement) member);
+    public XMember(Member member,
+                   Type type,
+                   XType xType,
+                   TypeBinder typeBinder,
+                   ReflectionManager reflectionManager) {
+        super((AnnotatedElement) member, reflectionManager);
+        this.type = type;
+        this.xType = xType;
+        this.typeBinder = typeBinder;
     }
 
     /**
@@ -41,6 +51,30 @@ public abstract class XMember extends XAnnotatedElement{
      */
     public int getModifiers() {
         return getMember().getModifiers();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Type getJavaType() {
+        return typeBinder.bind(type);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public XClass getType() {
+        return null;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public TypeBinder getTypeBinder() {
+        return typeBinder;
     }
 
 }

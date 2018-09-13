@@ -1,5 +1,8 @@
 package org.codnect.firesnap.reflection;
 
+import org.codnect.firesnap.reflection.binder.CompoundTypeBinder;
+import org.codnect.firesnap.reflection.binder.TypeBinder;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -13,13 +16,13 @@ import java.util.List;
  */
 public class XClass extends XAnnotatedElement{
 
-    private ReflectionManager reflectionManager;
     private Class annotatedClass;
+    private TypeBinder typeBinder;
 
-    protected XClass(Class annotatedClass, ReflectionManager reflectionManager) {
-        super(annotatedClass);
+    protected XClass(Class annotatedClass, ReflectionManager reflectionManager, TypeBinder typeBinder) {
+        super(annotatedClass, reflectionManager);
         this.annotatedClass = annotatedClass;
-        this.reflectionManager = reflectionManager;
+        this.typeBinder = typeBinder;
     }
 
     /**
@@ -98,7 +101,7 @@ public class XClass extends XAnnotatedElement{
     public List<XField> getDeclaredFields() {
         List<XField> fields = new LinkedList<>();
         for(Field field : annotatedClass.getDeclaredFields()) {
-            fields.add(reflectionManager.getXField(field));
+            fields.add(getReflectionManager().getXField(field, getTypeBinder()));
         }
         return fields;
     }
@@ -112,7 +115,7 @@ public class XClass extends XAnnotatedElement{
         List<XMethod> methods = new LinkedList<>();
 
         for(Method method : annotatedClass.getDeclaredMethods()) {
-            methods.add(reflectionManager.getXMethod(method));
+            methods.add(getReflectionManager().getXMethod(method, getTypeBinder()));
         }
 
         return methods;
@@ -128,7 +131,7 @@ public class XClass extends XAnnotatedElement{
 
         for(Field field : annotatedClass.getDeclaredFields()) {
             if(ReflectionUtil.isProperty(field)) {
-                fieldProperties.add(reflectionManager.getXProperty(field));
+                fieldProperties.add(getReflectionManager().getXProperty(field, getTypeBinder()));
             }
         }
 
@@ -145,11 +148,32 @@ public class XClass extends XAnnotatedElement{
 
         for(Method method : annotatedClass.getDeclaredMethods()) {
             if(ReflectionUtil.isProperty(method)) {
-                methodProperties.add(reflectionManager.getXProperty(method));
+                methodProperties.add(getReflectionManager().getXProperty(method, getTypeBinder()));
             }
         }
 
         return methodProperties;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public TypeBinder getTypeBinder() {
+        return typeBinder;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public XClass getSuperclass() {
+        return getReflectionManager().getXClass(annotatedClass.getSuperclass(),
+                CompoundTypeBinder.create(
+                        getTypeBinder(),
+                        getReflectionManager().getTypeBinder(annotatedClass)
+                )
+        );
     }
 
     /**

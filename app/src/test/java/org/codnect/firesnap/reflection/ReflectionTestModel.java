@@ -1,4 +1,4 @@
-package org.codnect.firesnap.model;
+package org.codnect.firesnap.reflection;
 
 import org.codnect.firesnap.annotation.Model;
 

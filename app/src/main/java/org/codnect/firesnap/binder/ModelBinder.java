@@ -44,10 +44,6 @@ public class ModelBinder {
         String modelName = persistenceClass.getModelName();
         metadataContext.getMetadataCollector().addModelAliasName(aliasName, modelName);
 
-        if(!modelName.equals(aliasName)) {
-            metadataContext.getMetadataCollector().addModelAliasName(modelName, modelName);
-        }
-
     }
 
 }
