@@ -179,6 +179,48 @@ public class XClass extends XAnnotatedElement{
     }
 
     /**
+     * Get the interfaces for XClass.
+     *
+     * @return the interfaces for XClass
+     */
+    public XClass[] getInterfaces() {
+        Class[] classes = toClass().getInterfaces();
+        int interfaceCount = classes.length;
+        XClass[] xClasses = new XClass[interfaceCount];
+        if(interfaceCount != 0) {
+            TypeBinder typeBinder = CompoundTypeBinder.create(
+                    getTypeBinder(),
+                    getReflectionManager().getTypeBinder(annotatedClass)
+            );
+            for(int index = 0;index < interfaceCount;index++) {
+                xClasses[index] = getReflectionManager().getXClass(classes[index], typeBinder);
+            }
+        }
+        return xClasses;
+    }
+
+    /**
+     * Determines if the class or interface represented by this XClass
+     * is either the same as, or is a superclass or  super interface of,
+     * the class or interface represented by the specified parameter.
+     *
+     * @param xClass another XClass
+     * @return result
+     */
+    public boolean isAssignableFrom(XClass xClass) {
+        return annotatedClass.isAssignableFrom(xClass.toClass());
+    }
+
+    /**
+     * Converts a XClass to a Class.
+     *
+     * @return a Class
+     */
+    public Class toClass() {
+        return annotatedClass;
+    }
+
+    /**
      * Returns a string representation of the XClass.
      *
      * @return a string representation of the XClass
