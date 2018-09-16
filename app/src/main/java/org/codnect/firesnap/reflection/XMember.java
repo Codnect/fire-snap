@@ -54,24 +54,27 @@ public abstract class XMember extends XAnnotatedElement{
     }
 
     /**
+     * Get the java type for this member.
      *
-     * @return
+     * @return the java type for this member.
      */
     public Type getJavaType() {
         return typeBinder.bind(type);
     }
 
     /**
+     * Get the type for this member.
      *
-     * @return
+     * @return the type for this member.
      */
     public XClass getType() {
-        return null;
+        return xType.getType();
     }
 
     /**
+     * Get the type binder for this member.
      *
-     * @return
+     * @return the type binder for this member.
      */
     public TypeBinder getTypeBinder() {
         return typeBinder;

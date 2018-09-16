@@ -17,14 +17,32 @@ public abstract class Pair<K, V> {
         this.hashCode = computeHashCode();
     }
 
+    /**
+     * Get the key for pair.
+     *
+     * @return the key for pair
+     */
     public K getKey() {
         return key;
     }
 
+    /**
+     * Get the value for pair.
+     *
+     * @return the value for pair
+     */
     public V getValue() {
         return value;
     }
 
+    /**
+     * Compare this object to another object, if they are
+     * same, it returns true. Otherwise, it returns false.
+     *
+     * @param obj another object
+     * @return if they are same, it returns true. Otherwise,
+     * it returns false.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -43,11 +61,21 @@ public abstract class Pair<K, V> {
         return compareObjects(key, other.key) && compareObjects(value, other.value);
     }
 
+    /**
+     * Get the hash code value for this.
+     *
+     * @return hash code value
+     */
     @Override
     public int hashCode() {
         return hashCode;
     }
 
+    /**
+     * Compute the hash code for this.
+     *
+     * @return hash code value
+     */
     private int computeHashCode() {
         int result = 0;
         if(key != null) {
@@ -59,10 +87,20 @@ public abstract class Pair<K, V> {
         return result;
     }
 
+    /**
+     * Compare two objects, if they are same, it returns true.
+     * Otherwise, it returns false.
+     *
+     * @param o1 first object
+     * @param o2 second object
+     * @return if they are same, it returns true. Otherwise,
+     * it returns false.
+     */
     private boolean compareObjects(Object o1, Object o2) {
         if(o1 == null) {
             return o2 == null;
         }
         return o1.equals(o2);
     }
+
 }

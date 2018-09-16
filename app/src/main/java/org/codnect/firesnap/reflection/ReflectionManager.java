@@ -1,6 +1,5 @@
 package org.codnect.firesnap.reflection;
 
-import org.codnect.firesnap.exception.FireSnapException;
 import org.codnect.firesnap.exception.NotResolvedException;
 import org.codnect.firesnap.reflection.binder.IdentityTypeBinder;
 import org.codnect.firesnap.reflection.binder.TypeBinder;
@@ -48,25 +47,27 @@ public class ReflectionManager {
     }
 
     /**
+     * Get the instance of the XClass for specified type.
      *
-     * @param classType
-     * @param typeBinder
-     * @return
+     * @param type a type that will be converted to an instance
+     *        of XClass.
+     * @param typeBinder a type binder
+     * @return the instance of the XClass for specified type
      */
-    protected XClass getXClass(Type classType, TypeBinder typeBinder) {
-        Type type = typeBinder.bind(classType);
-        if(type instanceof Class) {
-            TypePair typePairKey = new TypePair(type, typeBinder);
+    protected XClass getXClass(Type type, TypeBinder typeBinder) {
+        Type boundType = typeBinder.bind(type);
+        if(boundType instanceof Class) {
+            TypePair typePairKey = new TypePair(boundType, typeBinder);
             XClass xClass = xClassesMap.get(typePairKey);
             if(xClass == null) {
-                xClass = new XClass((Class) type, this, typeBinder);
+                xClass = new XClass((Class) boundType, this, typeBinder);
                 xClassesMap.put(typePairKey, xClass);
             }
             return xClass;
         }
-        else if(type instanceof ParameterizedType) {
-            getXClass(((ParameterizedType)type).getRawType(),
-                    typeBinderFactory.getBinder(type, typeBinder));
+        else if(boundType instanceof ParameterizedType) {
+            getXClass(((ParameterizedType)boundType).getRawType(),
+                    typeBinderFactory.getBinder(boundType, typeBinder));
         }
         throw new NotResolvedException("This type cannot be converted to a XClass : " + type.toString());
     }
@@ -74,7 +75,7 @@ public class ReflectionManager {
     /**
      * Converts a XClass to a Class.
      *
-     * @param xClass a XField
+     * @param xClass an instance of the XClass
      * @return a Class
      */
     public Class toClass(XClass xClass) {
@@ -86,7 +87,7 @@ public class ReflectionManager {
      * class member.
      *
      * @param member an instance of the Field
-     * @param typeBinder
+     * @param typeBinder a type binder
      * @return  the instance of the XField for Field
      */
     public XField getXField(Member member, TypeBinder typeBinder) {
@@ -103,7 +104,7 @@ public class ReflectionManager {
     /**
      * Converts a XField to a Field.
      *
-     * @param xField a XField
+     * @param xField an instance of the XField
      * @return a Field
      */
     public Field toField(XField xField) {
@@ -115,6 +116,7 @@ public class ReflectionManager {
      * class member.
      *
      * @param member an instance of the Method
+     * @param typeBinder a type binder
      * @return the instance of the XMethod for Method
      */
     public XMethod getXMethod(Member member, TypeBinder typeBinder) {
@@ -131,7 +133,7 @@ public class ReflectionManager {
     /**
      * Converts a XMethod to a Method.
      *
-     * @param xMethod a XMethod
+     * @param xMethod an instance of the XMethod
      * @return a Method
      */
     public Method toMethod(XMethod xMethod) {
@@ -143,6 +145,7 @@ public class ReflectionManager {
      * method class member.
      *
      * @param member an instance of the Field or the Method
+     * @param typeBinder a type binder
      * @return the instance of the XProperty for Field or Method
      */
     public XProperty getXProperty(Member member, TypeBinder typeBinder) {
@@ -157,10 +160,11 @@ public class ReflectionManager {
     }
 
     /**
+     * Get the instance of the XType for specified type.
      *
-     * @param typeBinder
-     * @param type
-     * @return
+     * @param typeBinder an instance of the type binder
+     * @param type an instance of the type
+     * @return the instance of the XType for specified type.
      */
     public XType getXType(TypeBinder typeBinder, Type type) {
         Type boundType = toApproximateBinder(typeBinder).bind(type);
@@ -173,22 +177,25 @@ public class ReflectionManager {
             return new XCollectionType(type, typeBinder, this);
         }
 
-        throw new IllegalArgumentException("void type cannot be convert to XType");
+        throw new IllegalArgumentException(type + " type cannot be convert to XType");
     }
 
     /**
+     * Converts the specified type binder to an approximate type
+     * binder.
      *
-     * @param typeBinder
-     * @return
+     * @param typeBinder an instance of the type binder
+     * @return an approximate type binder
      */
     public TypeBinder toApproximateBinder(TypeBinder typeBinder) {
         return typeBinderFactory.toApproximateBinder(typeBinder);
     }
 
     /**
+     * Get the type binder for specified type.
      *
-     * @param type
-     * @return
+     * @param type an instance of the type
+     * @return a type binder for specified type
      */
     public TypeBinder getTypeBinder(Type type) {
         if(type instanceof Class) {

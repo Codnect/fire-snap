@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * SimpleTypeBinder class binds formal type arguments (typically T, E, etc.)
+ * to actual types.
+ *
  * Created by Burak Koken on 8.9.2018.
  *
  * @author Burak Koken
@@ -23,9 +26,11 @@ public class SimpleTypeBinder implements TypeBinder{
     }
 
     /**
+     * Create a new simple type binder according to the specified formal and
+     * actual type arguments.
      *
-     * @param formalTypeArgs
-     * @param actualTypeArgs
+     * @param formalTypeArgs formal type arguments
+     * @param actualTypeArgs actual type arguments.
      */
     public SimpleTypeBinder(Type[] formalTypeArgs, Type[] actualTypeArgs) {
         for (int index = 0;index < formalTypeArgs.length;index++) {
@@ -34,9 +39,10 @@ public class SimpleTypeBinder implements TypeBinder{
     }
 
     /**
+     * Bind the specified type.
      *
-     * @param type
-     * @return
+     * @param type an instance of type
+     * @return a new type for specified type.
      */
     @Override
     public Type bind(Type type) {
@@ -73,9 +79,10 @@ public class SimpleTypeBinder implements TypeBinder{
     }
 
     /**
+     * Substitute all types.
      *
-     * @param types
-     * @return
+     * @param types instances of the types
+     * @return new types
      */
     private Type[] substitute(Type[] types) {
         Type[] substTypes = new Type[types.length];

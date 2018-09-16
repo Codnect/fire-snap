@@ -3,6 +3,9 @@ package org.codnect.firesnap.reflection.binder;
 import java.lang.reflect.Type;
 
 /**
+ * CompoundTypeBinder provides type binding using two different
+ * type binder.
+ *
  * Created by Burak Koken on 8.9.2018.
  *
  * @author Burak Koken
@@ -20,10 +23,11 @@ public class CompoundTypeBinder implements TypeBinder {
     }
 
     /**
+     * Create a new compound type binder using two different type binder.
      *
-     * @param xTypeBinder
-     * @param yTypeBinder
-     * @return
+     * @param xTypeBinder first type binder
+     * @param yTypeBinder second type binder
+     * @return a composition of two type binder
      */
     public static TypeBinder create(TypeBinder xTypeBinder, TypeBinder yTypeBinder) {
         if (xTypeBinder == IdentityTypeBinder.getInstance())
@@ -34,9 +38,10 @@ public class CompoundTypeBinder implements TypeBinder {
     }
 
     /**
+     * Bind the specified type.
      *
-     * @param type
-     * @return
+     * @param type an instance of type
+     * @return a new type for specified type.
      */
     @Override
     public Type bind(Type type) {
@@ -44,9 +49,12 @@ public class CompoundTypeBinder implements TypeBinder {
     }
 
     /**
+     * Compare this object to another object, if they are
+     * same, it returns true. Otherwise, it returns false.
      *
-     * @param obj
-     * @return
+     * @param obj another object
+     * @return if they are same, it returns true. Otherwise,
+     * it returns false.
      */
     @Override
     public boolean equals(Object obj) {
@@ -70,8 +78,9 @@ public class CompoundTypeBinder implements TypeBinder {
     }
 
     /**
+     * Get the hash code value for this type binder.
      *
-     * @return
+     * @return hash code value
      */
     @Override
     public int hashCode() {
@@ -79,8 +88,9 @@ public class CompoundTypeBinder implements TypeBinder {
     }
 
     /**
+     * Compute the hash code for this type binder.
      *
-     * @return
+     * @return hash code value
      */
     private int computeHashCode() {
         int result;

@@ -19,9 +19,10 @@ public class TypeBinderFactory {
     }
 
     /**
+     * Get the type binder for specified type.
      *
-     * @param type
-     * @return
+     * @param type an instance of the type
+     * @return type binder
      */
     public TypeBinder getBinder(Type type) {
         if(type == null) {
@@ -31,19 +32,22 @@ public class TypeBinderFactory {
     }
 
     /**
+     * Get the compound type binder according to specified type
+     * and type binder.
      *
-     * @param type
-     * @param typeBinder
-     * @return
+     * @param type an instance of the type
+     * @param typeBinder an instance of the type binder
+     * @return compound type binder
      */
     public TypeBinder getBinder(Type type, TypeBinder typeBinder) {
         return CompoundTypeBinder.create(getBinder(type), typeBinder);
     }
 
     /**
+     * Create a new type binder for specified type.
      *
-     * @param type
-     * @return
+     * @param type an instance of the type
+     * @return type binder
      */
     private TypeBinder createBinder(Type type) {
         if(type instanceof Class) {
@@ -55,10 +59,12 @@ public class TypeBinderFactory {
         }
         throw new IllegalArgumentException( "Invalid type for generating binder : " + type);
     }
+
     /**
+     * Create a new type binder for specified parameterized type.
      *
-     * @param type
-     * @return
+     * @param type an instance of the parameterized type
+     * @return type binder
      */
     private TypeBinder createBinder(ParameterizedType type) {
         Type[] actualTypeArguments = type.getActualTypeArguments();
@@ -71,9 +77,10 @@ public class TypeBinderFactory {
     }
 
     /**
+     * Create a new type binder for specified class's super class.
      *
-     * @param xClass
-     * @return
+     * @param xClass a class
+     * @return type binder
      */
     private TypeBinder createSuperTypeBinder(Class xClass) {
         Class superClass = xClass.getSuperclass();
@@ -94,9 +101,11 @@ public class TypeBinderFactory {
     }
 
     /**
+     * Converts the specified type binder to an approximate type
+     * binder.
      *
-     * @param typeBinder
-     * @return
+     * @param typeBinder an instance of the type binder
+     * @return an approximate type binder
      */
     public TypeBinder toApproximateBinder(TypeBinder typeBinder) {
         return CompoundTypeBinder.create(new ApproximateTypeBinder(), typeBinder);

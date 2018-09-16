@@ -156,16 +156,18 @@ public class XClass extends XAnnotatedElement{
     }
 
     /**
+     * Get the type binder for this XClass.
      *
-     * @return
+     * @return the type binder for this XClass
      */
     public TypeBinder getTypeBinder() {
         return typeBinder;
     }
 
     /**
+     * Get the this XClass's super class.
      *
-     * @return
+     * @return the this XClass's super class
      */
     public XClass getSuperclass() {
         return getReflectionManager().getXClass(annotatedClass.getSuperclass(),

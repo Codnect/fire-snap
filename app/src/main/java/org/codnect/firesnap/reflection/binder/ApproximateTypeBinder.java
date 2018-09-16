@@ -11,17 +11,18 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 
 /**
- * Created by Burak Koken on 8.9.2018.
+ * ApproximateTypeBinder approximates the unresolved generic simple
+ * type or collection to their nearest upper binding.
  *
  * @author Burak Koken
  */
 public class ApproximateTypeBinder implements TypeBinder {
 
     /**
+     * Bind the specified type.
      *
-     *
-     * @param type
-     * @return
+     * @param type an instance of type
+     * @return a new type for specified type.
      */
     @Override
     public Type bind(Type type) {
@@ -73,9 +74,10 @@ public class ApproximateTypeBinder implements TypeBinder {
     }
 
     /**
+     * Apply coarse approximation for specified type.
      *
-     * @param type
-     * @return
+     * @param type an instance of the type
+     * @return new type that was applied coarse approximation.
      */
     private Type coarseApproximation(Type type) {
         if(type instanceof ParameterizedType) {
@@ -99,9 +101,10 @@ public class ApproximateTypeBinder implements TypeBinder {
     }
 
     /**
+     * Get approximate type for specified bounds.
      *
-     * @param bounds
-     * @return
+     * @param bounds type bounds
+     * @return new type
      */
     private Type approximateTo(Type[] bounds) {
         if (bounds.length != 1) {

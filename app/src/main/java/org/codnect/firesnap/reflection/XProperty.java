@@ -24,11 +24,12 @@ public class XProperty extends XMember {
     }
 
     /**
+     * Create a new instance of the XProperty for specified member.
      *
-     * @param member
-     * @param typeBinder
-     * @param reflectionManager
-     * @return
+     * @param member an instance of the Method or Field
+     * @param typeBinder an instance of type binder
+     * @param reflectionManager reflection manager
+     * @return a new instance of the XProperty for specified member.
      */
     public static XProperty create(Member member, TypeBinder typeBinder, ReflectionManager reflectionManager) {
         if(!(member instanceof Field) && !(member instanceof Method)) {
@@ -36,9 +37,9 @@ public class XProperty extends XMember {
         }
         Type type = null;
         if(member instanceof Field) {
-            typeBinder.bind(((Field)member).getGenericType());
+            type = typeBinder.bind(((Field)member).getGenericType());
         } else {
-            typeBinder.bind(((Method)member).getGenericReturnType());
+            type = typeBinder.bind(((Method)member).getGenericReturnType());
         }
         XType xType = reflectionManager.getXType(typeBinder, type);
         return new XProperty(member, type, xType, typeBinder, reflectionManager);

@@ -16,17 +16,19 @@ public class IdentityTypeBinder implements TypeBinder{
     }
 
     /**
+     * Get the instance of the IdentityTypeBinder.
      *
-     * @return
+     * @return the instance of the IdentityTypeBinder
      */
     public static IdentityTypeBinder getInstance() {
         return identityTypeBinder;
     }
 
     /**
+     * Bind the specified type.
      *
-     * @param type
-     * @return
+     * @param type an instance of type
+     * @return a new type for specified type.
      */
     @Override
     public Type bind(Type type) {

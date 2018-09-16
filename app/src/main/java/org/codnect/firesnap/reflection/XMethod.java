@@ -22,11 +22,12 @@ public class XMethod extends XMember {
     }
 
     /**
+     * Create a new instance of the XMethod for specified member.
      *
-     * @param member
-     * @param typeBinder
-     * @param reflectionManager
-     * @return
+     * @param member an instance of Method
+     * @param typeBinder an instance of type binder
+     * @param reflectionManager reflection manager
+     * @return a new instance of the XMethod for specified member.
      */
     public static XMethod create(Member member, TypeBinder typeBinder, ReflectionManager reflectionManager) {
         if(!(member instanceof Method)) {

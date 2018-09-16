@@ -14,11 +14,12 @@ import java.util.Arrays;
 public class TypeFactory {
 
     /**
+     * Create a new parameterized type.
      *
-     * @param rawType
-     * @param actualTypeArgs
-     * @param ownerType
-     * @return
+     * @param rawType raw type
+     * @param actualTypeArgs actual type arguments
+     * @param ownerType owner type
+     * @return a new parameterized type
      */
     public static ParameterizedType createParameterizedType(final Type rawType,
                                                             final Type[] actualTypeArgs,
@@ -61,9 +62,10 @@ public class TypeFactory {
     }
 
     /**
+     * Create a new array type.
      *
-     * @param type
-     * @return
+     * @param type an instance of type
+     * @return a new array type
      */
     public static Type createArrayType(Type type) {
         if (type instanceof Class) {
@@ -73,9 +75,10 @@ public class TypeFactory {
     }
 
     /**
+     * Create a new generic array type.
      *
-     * @param type
-     * @return
+     * @param type an instance of type
+     * @return a new generic type
      */
     private static GenericArrayType createGenericArrayType(final Type type) {
         return new GenericArrayType() {
@@ -101,9 +104,9 @@ public class TypeFactory {
     }
 
     /**
+     * Compute the hash code for specified object.
      *
-     * @param object
-     * @return
+     * @return hash code value
      */
     private static int computeHashCode(Object object) {
         if (object == null) {
@@ -113,10 +116,13 @@ public class TypeFactory {
     }
 
     /**
+     * Compare two objects, if they are same, it returns true.
+     * Otherwise, it returns false.
      *
-     * @param o1
-     * @param o2
-     * @return
+     * @param o1 first object
+     * @param o2 second object
+     * @return if they are same, it returns true. Otherwise,
+     * it returns false.
      */
     private static boolean compareObjects(Object o1, Object o2) {
         if(o1 == null) {

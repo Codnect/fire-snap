@@ -96,8 +96,9 @@ public class XAnnotatedElement implements AnnotatedElement {
     }
 
     /**
+     * Get the reflection manager.
      *
-     * @return
+     * @return reflection manager
      */
     public ReflectionManager getReflectionManager() {
         return reflectionManager;

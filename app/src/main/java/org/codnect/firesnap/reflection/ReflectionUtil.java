@@ -51,7 +51,7 @@ public class ReflectionUtil {
     /**
      * Determines if the type is a simple type.
      *
-     * @param type
+     * @param type an instance of the type
      * @return if the type is a simple type, it returns
      * true. Otherwise, it returns false.
      */
@@ -87,7 +87,7 @@ public class ReflectionUtil {
     /**
      * Determines if the type is a array type.
      *
-     * @param type
+     * @param type an instance of the type
      * @return if the type is a array type, it returns
      * true. Otherwise, it returns false.
      */
@@ -119,7 +119,7 @@ public class ReflectionUtil {
     /**
      * Get the collection class from type.
      *
-     * @param type
+     * @param type an instance of the type
      * @return the collection class from type.
      */
     public static Class getCollectionClass(Type type) {
@@ -143,7 +143,7 @@ public class ReflectionUtil {
     /**
      * Determines if the type is a collection type.
      *
-     * @param type
+     * @param type an instance of the type
      * @return if the type is a collection type, it returns
      * true. Otherwise, it returns false.
      */
@@ -172,9 +172,11 @@ public class ReflectionUtil {
     }
 
     /**
+     * Determines if the specified type is a resolved type.
      *
-     * @param type
-     * @return
+     * @param type an instance of the type
+     * @return if the type is a resolved type, it returns
+     * true. Otherwise, it returns false.
      */
     public static boolean isResolved(Type type) {
 

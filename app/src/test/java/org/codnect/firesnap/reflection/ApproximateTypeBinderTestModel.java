@@ -1,9 +1,5 @@
 package org.codnect.firesnap.reflection;
 
-import org.codnect.firesnap.binder.AnnotationBinder;
-import org.codnect.firesnap.model.Foo;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 

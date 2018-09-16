@@ -4,7 +4,6 @@ import org.codnect.firesnap.reflection.binder.TypeBinder;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 /**
@@ -23,11 +22,12 @@ public class XField extends XMember {
     }
 
     /**
+     * Create a new instance of the XField for specified member.
      *
-     * @param member
-     * @param typeBinder
-     * @param reflectionManager
-     * @return
+     * @param member an instance of Field
+     * @param typeBinder an instance of type binder
+     * @param reflectionManager reflection manager
+     * @return a new instance of the XField for specified member.
      */
     public static XField create(Member member, TypeBinder typeBinder, ReflectionManager reflectionManager) {
         if(!(member instanceof Field)) {
