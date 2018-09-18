@@ -11,4 +11,6 @@ public interface MetadataSourceProcessor {
 
     void process();
 
+    void finish();
+
 }

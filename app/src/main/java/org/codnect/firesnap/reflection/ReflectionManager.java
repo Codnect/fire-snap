@@ -206,4 +206,17 @@ public class ReflectionManager {
         return null;
     }
 
+    /**
+     *
+     * @param xClass
+     * @param otherClass
+     * @return
+     */
+    public boolean equals(XClass xClass, Class otherClass) {
+        if (xClass == null) {
+            return otherClass == null;
+        }
+        return xClass.toClass().equals(otherClass);
+    }
+
 }
