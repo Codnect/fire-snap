@@ -1,6 +1,5 @@
 package org.codnect.firesnap.core;
 
-import android.content.Entity;
 import android.util.Log;
 
 import org.codnect.firesnap.annotation.Embeddable;
@@ -12,6 +11,7 @@ import org.codnect.firesnap.reflection.XClass;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Process the annotation metadata.
@@ -54,11 +54,14 @@ public class AnnotationMetadataProcessor implements MetadataSourceProcessor {
     @Override
     public void process() {
         List<XClass> allHierarchyClasses = getAllHierarchyClasses();
+        Map<XClass, InheritanceState> inheritanceStateMap = AnnotationBinder.createInheritanceStates(
+                allHierarchyClasses,
+                metadataContext
+        );
         /* bind the classes */
-        for(XClass categorizedClass : categorizedClasses) {
-            AnnotationBinder.bindClass(categorizedClass, metadataContext);
+        for(XClass xClass : allHierarchyClasses) {
+            AnnotationBinder.bindClass(xClass, inheritanceStateMap, metadataContext);
         }
-
     }
 
     /**
@@ -84,7 +87,6 @@ public class AnnotationMetadataProcessor implements MetadataSourceProcessor {
         } else {
             Log.w(LOG_TAG, "Encountered a non-categorized annotated class [" + annotatedClass.getName() + "]");
         }
-
     }
 
     /**
@@ -107,7 +109,7 @@ public class AnnotationMetadataProcessor implements MetadataSourceProcessor {
         }
 
         List<XClass> copyAllHierarchyClasses = new ArrayList<>(allHierarchyClasses);
-        List<XClass> orderedHierarchyClasses = new ArrayList<>();
+        List<XClass> orderedHierarchyClasses = new ArrayList<>(allHierarchyClasses.size());
         while (copyAllHierarchyClasses.size() > 0) {
             XClass xClass = copyAllHierarchyClasses.get(0);
             orderHierarchyClasses(allHierarchyClasses, copyAllHierarchyClasses, orderedHierarchyClasses, xClass);

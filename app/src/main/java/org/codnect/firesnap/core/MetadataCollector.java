@@ -1,7 +1,11 @@
 package org.codnect.firesnap.core;
 
+import org.codnect.firesnap.annotation.Embeddable;
+import org.codnect.firesnap.annotation.MappedSuperClass;
+import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.exception.MappingException;
 import org.codnect.firesnap.mapping.PersistenceClass;
+import org.codnect.firesnap.reflection.XClass;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,10 +19,12 @@ public class MetadataCollector {
 
     private Map<String, String> modelAliasNames;
     private Map<String, PersistenceClass> modelBindingMap;
+    private Map<String, AnnotatedClassType> annotatedClassTypeMap;
 
     public MetadataCollector() {
         modelAliasNames = new HashMap<>();
         modelBindingMap = new HashMap<>();
+        annotatedClassTypeMap = new HashMap<>();
     }
 
     /**
@@ -50,6 +56,28 @@ public class MetadataCollector {
         }
 
         modelBindingMap.put(modelName, persistenceClass);
+    }
+
+    /**
+     *
+     * @param xClass
+     * @return
+     */
+    public AnnotatedClassType getClassType(XClass xClass) {
+        AnnotatedClassType annotatedClassType = annotatedClassTypeMap.get(xClass);
+        if(annotatedClassType == null) {
+            if(xClass.isAnnotationPresent(Model.class)) {
+                annotatedClassType = AnnotatedClassType.MODEL;
+            } else if(xClass.isAnnotationPresent(Embeddable.class)) {
+                annotatedClassType = AnnotatedClassType.EMBEDDABLE;
+            } else if(xClass.isAnnotationPresent(MappedSuperClass.class)) {
+                annotatedClassType = AnnotatedClassType.EMBEDDABLE_SUPERCLASS;
+            } else {
+                annotatedClassType = AnnotatedClassType.NONE;
+            }
+            annotatedClassTypeMap.put(xClass.getName(), annotatedClassType);
+        }
+        return annotatedClassType;
     }
 
 }
