@@ -4,7 +4,7 @@ import org.codnect.firesnap.annotation.Embeddable;
 import org.codnect.firesnap.annotation.MappedSuperClass;
 import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.exception.MappingException;
-import org.codnect.firesnap.mapping.PersistenceClass;
+import org.codnect.firesnap.mapping.PersistentClass;
 import org.codnect.firesnap.reflection.XClass;
 
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class MetadataCollector {
 
     private Map<String, String> modelAliasNames;
-    private Map<String, PersistenceClass> modelBindingMap;
+    private Map<String, PersistentClass> modelBindingMap;
     private Map<String, AnnotatedClassType> annotatedClassTypeMap;
 
     public MetadataCollector() {
@@ -46,16 +46,25 @@ public class MetadataCollector {
      * Add the persistence classes that is completed of the binding
      * process to model binding map.
      *
-     * @param persistenceClass persistence class
+     * @param persistentClass persistence class
      */
-    public void addModelBinding(PersistenceClass persistenceClass) {
-        String modelName = persistenceClass.getModelName();
+    public void addModelBinding(PersistentClass persistentClass) {
+        String modelName = persistentClass.getModelName();
 
         if(modelBindingMap.containsKey(modelName)) {
             throw new MappingException(modelName + " is duplicated.");
         }
 
-        modelBindingMap.put(modelName, persistenceClass);
+        modelBindingMap.put(modelName, persistentClass);
+    }
+
+    /**
+     *
+     * @param modelName
+     * @return
+     */
+    public PersistentClass getModelBinding(String modelName) {
+        return modelBindingMap.get(modelName);
     }
 
     /**

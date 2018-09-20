@@ -1,8 +1,9 @@
 package org.codnect.firesnap.binder;
 
 import org.codnect.firesnap.annotation.Model;
+import org.codnect.firesnap.core.InheritanceState;
 import org.codnect.firesnap.core.MetadataContext;
-import org.codnect.firesnap.mapping.PersistenceClass;
+import org.codnect.firesnap.mapping.PersistentClass;
 import org.codnect.firesnap.reflection.XClass;
 
 /**
@@ -12,16 +13,18 @@ import org.codnect.firesnap.reflection.XClass;
  */
 public class ModelBinder {
 
+    private String name;
     private XClass annotatedClass;
     private Model modelAnnotation;
     private MetadataContext metadataContext;
-    private PersistenceClass persistenceClass;
+    private PersistentClass persistentClass;
+    private InheritanceState inheritanceState;
 
-    public ModelBinder(XClass annotatedClass, Model modelAnnotation, PersistenceClass persistenceClass,
+    public ModelBinder(XClass annotatedClass, Model modelAnnotation, PersistentClass persistentClass,
                        MetadataContext metadataContext) {
         this.annotatedClass = annotatedClass;
         this.modelAnnotation = modelAnnotation;
-        this.persistenceClass = persistenceClass;
+        this.persistentClass = persistentClass;
         this.metadataContext = metadataContext;
     }
 
@@ -29,21 +32,25 @@ public class ModelBinder {
      * Bind the model.
      */
     public void bindModel() {
-
         if(BinderHelper.isEmptyAnnotationValue(modelAnnotation.value())) {
-            persistenceClass.setAliasName(annotatedClass.getName());
+            persistentClass.setAliasName(annotatedClass.getName());
         }
         else {
-            persistenceClass.setAliasName(modelAnnotation.value());
+            name = modelAnnotation.value();
+            persistentClass.setAliasName(modelAnnotation.value());
         }
-        persistenceClass.setModelName(annotatedClass.getName());
-        persistenceClass.setClassName(annotatedClass.getName());
+        persistentClass.setModelName(annotatedClass.getName());
+        persistentClass.setClassName(annotatedClass.getName());
 
-
-        String aliasName = persistenceClass.getAliasName();
-        String modelName = persistenceClass.getModelName();
-        metadataContext.getMetadataCollector().addModelAliasName(aliasName, modelName);
-
+        String aliasName = persistentClass.getAliasName();
+        String modelName = persistentClass.getModelName();
+        metadataContext.getMetadataCollector().addModelAliasName(modelName, modelName);
+        if(!modelName.equals(aliasName)) {
+            metadataContext.getMetadataCollector().addModelAliasName(aliasName, modelName);
+        }
     }
 
+    public void setInheritanceState(InheritanceState inheritanceState) {
+        this.inheritanceState = inheritanceState;
+    }
 }

@@ -31,11 +31,11 @@ public class InheritanceState {
         determineInheritanceStrategy();
     }
 
-    public XClass getxClass() {
+    public XClass getXClass() {
         return xClass;
     }
 
-    public void setxClass(XClass xClass) {
+    public void setXClass(XClass xClass) {
         this.xClass = xClass;
     }
 

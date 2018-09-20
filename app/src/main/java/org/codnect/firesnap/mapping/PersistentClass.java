@@ -1,18 +1,21 @@
 package org.codnect.firesnap.mapping;
 
+import org.codnect.firesnap.core.MetadataContext;
+
 /**
  * Created by Burak Koken on 20.5.2018.
  *
  * @author Burak Koken
  */
-public class PersistenceClass {
+public abstract class PersistentClass {
 
     private String aliasName;
     private String modelName;
     private String className;
+    private MetadataContext metadataContext;
 
-    public PersistenceClass() {
-
+    public PersistentClass(MetadataContext metadataContext) {
+        this.metadataContext = metadataContext;
     }
 
     /**

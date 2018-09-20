@@ -7,7 +7,13 @@ import org.codnect.firesnap.core.AnnotatedClassType;
 import org.codnect.firesnap.core.InheritanceState;
 import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.exception.AnnotationException;
-import org.codnect.firesnap.mapping.PersistenceClass;
+import org.codnect.firesnap.exception.MappingException;
+import org.codnect.firesnap.exception.PersistenceException;
+import org.codnect.firesnap.mapping.JoinedSubclass;
+import org.codnect.firesnap.mapping.PersistentClass;
+import org.codnect.firesnap.mapping.RootClass;
+import org.codnect.firesnap.mapping.SingleNodeSubclass;
+import org.codnect.firesnap.mapping.UnionSubclass;
 import org.codnect.firesnap.reflection.XClass;
 
 import java.util.HashMap;
@@ -40,14 +46,18 @@ public class AnnotationBinder {
         AnnotatedClassType annotatedClassType = metadataContext.getMetadataCollector().getClassType(xClass);
 
         if(isModelClassType(annotatedClassType, xClass)) {
-            PersistenceClass persistenceClass = new PersistenceClass();
+            PersistentClass superModelPersistentClass = getSuperModelPersistentClass(xClass,
+                    inheritanceStateMap,
+                    inheritanceState,
+                    metadataContext);
+            PersistentClass persistentClass = createPersistentClass(inheritanceState, superModelPersistentClass, metadataContext);
+
             Model modelAnnotation = xClass.getAnnotation(Model.class);
-            ModelBinder modelBinder = new ModelBinder(xClass, modelAnnotation, persistenceClass, metadataContext);
+            ModelBinder modelBinder = new ModelBinder(xClass, modelAnnotation, persistentClass, metadataContext);
+            modelBinder.setInheritanceState(inheritanceState);
             modelBinder.bindModel();
 
-            /* ... */
-
-            metadataContext.getMetadataCollector().addModelBinding(persistenceClass);
+            metadataContext.getMetadataCollector().addModelBinding(persistentClass);
         }
 
     }
@@ -111,6 +121,59 @@ public class AnnotationBinder {
             inheritanceStateMap.put(xClass, classInheritanceState);
         }
         return inheritanceStateMap;
+    }
+
+    /**
+     *
+     * @param xClass
+     * @param inheritanceStateMap
+     * @param inheritanceState
+     * @param metadataContext
+     * @return
+     */
+    private static PersistentClass getSuperModelPersistentClass(XClass xClass,
+                                                               Map<XClass, InheritanceState> inheritanceStateMap,
+                                                               InheritanceState inheritanceState,
+                                                               MetadataContext metadataContext) {
+        InheritanceState superModelInheritanceState = InheritanceState.getSuperModelInheritanceState(
+                xClass,
+                inheritanceStateMap
+        );
+        PersistentClass superModelPersistentClass = null;
+        if(superModelInheritanceState != null) {
+            superModelPersistentClass = metadataContext.getMetadataCollector().getModelBinding(
+                    superModelInheritanceState.getXClass().getName()
+            );
+            if(superModelPersistentClass == null && inheritanceState.hasParents()) {
+                throw new MappingException("Subclasses have to be mapped after their parents : "
+                        + superModelInheritanceState.getXClass().getName());
+            }
+        }
+        return superModelPersistentClass;
+    }
+
+    /**
+     *
+     * @param inheritanceState
+     * @param superModelPersistentClass
+     * @param metadataContext
+     * @return
+     */
+    private static PersistentClass createPersistentClass(InheritanceState inheritanceState,
+                                                         PersistentClass superModelPersistentClass,
+                                                         MetadataContext metadataContext) {
+        /* if class has no any parents */
+        if(!inheritanceState.hasParents()) {
+            return new RootClass(metadataContext);
+        } else if(inheritanceState.getStrategy() == InheritanceStrategy.SINGLE_NODE) {
+            return new SingleNodeSubclass(metadataContext, superModelPersistentClass);
+        } else if(inheritanceState.getStrategy() == InheritanceStrategy.NODE_PER_CLASS) {
+            return new UnionSubclass(metadataContext, superModelPersistentClass);
+        } else if(inheritanceState.getStrategy() == InheritanceStrategy.JOINED) {
+            return new JoinedSubclass(metadataContext, superModelPersistentClass);
+        }
+
+        throw new PersistenceException("Unknown inheritance strategy : " + inheritanceState.getStrategy());
     }
 
 }
