@@ -40,7 +40,8 @@ public class MetadataBuilder {
      */
     private ManagedResources prepareManagedResources() {
         ManagedResources managedResources = new ManagedResources(metadataSources);
-        PackageMetadataScanner.scan(managedResources);
+        PackageMetadataScanner packageMetadataScanner = new PackageMetadataScanner();
+        packageMetadataScanner.scan(managedResources);
         return managedResources;
     }
 

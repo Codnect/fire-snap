@@ -18,7 +18,8 @@ public class PackageMetadataScannerTest {
         metadataSources.addPackage("org.codnect.firesnap.model");
 
         ManagedResources managedResources = new ManagedResources(metadataSources);
-        PackageMetadataScanner.scan(managedResources);
+        PackageMetadataScanner packageMetadataScanner = new PackageMetadataScanner();
+        packageMetadataScanner.scan(managedResources);
 
         assertNotEquals(managedResources.getAnnotatedClasses(), 0);
     }
