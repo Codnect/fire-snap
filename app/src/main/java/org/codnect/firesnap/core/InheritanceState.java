@@ -36,6 +36,7 @@ public class InheritanceState {
     private List<XClass> mappedSuperClasses;
     private MetadataContext metadataContext;
     private ReflectionManager reflectionManager;
+    private PropertyDataCollector propertyDataCollector;
 
     public InheritanceState(XClass xClass,
                             Map<XClass, InheritanceState> inheritanceStateMap,
