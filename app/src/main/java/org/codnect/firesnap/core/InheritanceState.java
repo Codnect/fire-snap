@@ -1,11 +1,19 @@
 package org.codnect.firesnap.core;
 
+import org.codnect.firesnap.annotation.Access;
 import org.codnect.firesnap.annotation.AccessType;
+import org.codnect.firesnap.annotation.EmbeddedId;
+import org.codnect.firesnap.annotation.Id;
 import org.codnect.firesnap.annotation.Inheritance;
 import org.codnect.firesnap.annotation.InheritanceStrategy;
 import org.codnect.firesnap.annotation.MappedSuperClass;
+import org.codnect.firesnap.annotation.Model;
+import org.codnect.firesnap.exception.AnnotationException;
+import org.codnect.firesnap.exception.MappingException;
+import org.codnect.firesnap.mapping.PropertyDataCollector;
 import org.codnect.firesnap.reflection.ReflectionManager;
 import org.codnect.firesnap.reflection.XClass;
+import org.codnect.firesnap.reflection.XProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +35,7 @@ public class InheritanceState {
     private boolean isEmbeddableSuperclass;
     private List<XClass> mappedSuperClasses;
     private MetadataContext metadataContext;
+    private ReflectionManager reflectionManager;
 
     public InheritanceState(XClass xClass,
                             Map<XClass, InheritanceState> inheritanceStateMap,
@@ -35,6 +44,7 @@ public class InheritanceState {
         this.inheritanceStateMap = inheritanceStateMap;
         this.mappedSuperClasses = new ArrayList<>();
         this.metadataContext = metadataContext;
+        this.reflectionManager = metadataContext.getReflectionManager();
         determineInheritanceStrategy();
     }
 
@@ -103,6 +113,44 @@ public class InheritanceState {
 
     /**
      *
+     * @return
+     */
+    private AccessType getDefaultAccessType() {
+        for (XClass xClass = this.xClass; xClass != null; xClass = xClass.getSuperclass()) {
+            if((xClass.isAnnotationPresent(Model.class) || xClass.isAnnotationPresent(MappedSuperClass.class))
+                    && (xClass.getSuperclass() == null || reflectionManager.equals(xClass.getSuperclass(), Object.class))
+                    && (xClass.isAnnotationPresent(Access.class))) {
+                return xClass.getAnnotation(Access.class).value();
+            }
+        }
+        return determineAccessTypeAccordingToProperties();
+    }
+
+    /**
+     *
+     * @return
+     */
+    private AccessType determineAccessTypeAccordingToProperties()   {
+        for(XClass xClass = this.xClass; xClass != null; xClass = xClass.getSuperclass()) {
+            if((xClass.isAnnotationPresent(Model.class) || xClass.isAnnotationPresent(MappedSuperClass.class))
+                    && (xClass.getSuperclass() == null || reflectionManager.equals(xClass.getSuperclass(), Object.class))){
+                for(XProperty xProperty : xClass.getDeclaredMethodProperties()) {
+                    if(xProperty.isAnnotationPresent(Id.class) || xProperty.isAnnotationPresent(EmbeddedId.class)) {
+                        return AccessType.METHOD;
+                    }
+                }
+                for(XProperty xProperty : xClass.getDeclaredFieldProperties()) {
+                    if(xProperty.isAnnotationPresent(Id.class) || xProperty.isAnnotationPresent(EmbeddedId.class)) {
+                        return AccessType.FIELD;
+                    }
+                }
+            }
+        }
+        throw new AnnotationException("Model has no identifier : " + xClass.getName());
+    }
+
+    /**
+     *
      * @param xClass
      * @param inheritanceStateMap
      * @return
@@ -148,7 +196,6 @@ public class InheritanceState {
 
         XClass currentClass = xClass;
         InheritanceState superClassInheritanceState;
-        ReflectionManager reflectionManager = metadataContext.getReflectionManager();
         while (true) {
             mappedSuperClasses.add(0, currentClass);
             XClass superClass = currentClass;
@@ -166,6 +213,20 @@ public class InheritanceState {
         }
 
         return mappedSuperClasses;
+    }
+
+    /**
+     *
+     */
+    private void getPropertiesData() {
+        if(propertyDataCollector == null) {
+            InheritanceState inheritanceState = inheritanceStateMap.get(xClass);
+            if(inheritanceState.isEmbeddableSuperclass()) {
+                throw new MappingException("You cannot get the properties data for mapped super class: " + xClass.getName());
+            }
+            accessType = getDefaultAccessType();
+            getMappedSuperClasses();
+        }
     }
 
 }

@@ -7,20 +7,10 @@ package org.codnect.firesnap.annotation;
  */
 public enum AccessType {
 
-    DEFAULT("method"),
+    DEFAULT,
 
-    METHOD("method"),
+    METHOD,
 
-    FIELD("field");
-
-    String type;
-
-    AccessType(String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
-    }
+    FIELD
 
 }
