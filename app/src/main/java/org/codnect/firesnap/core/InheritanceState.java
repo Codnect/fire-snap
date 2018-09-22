@@ -4,8 +4,11 @@ import org.codnect.firesnap.annotation.AccessType;
 import org.codnect.firesnap.annotation.Inheritance;
 import org.codnect.firesnap.annotation.InheritanceStrategy;
 import org.codnect.firesnap.annotation.MappedSuperClass;
+import org.codnect.firesnap.reflection.ReflectionManager;
 import org.codnect.firesnap.reflection.XClass;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,12 +25,16 @@ public class InheritanceState {
     private InheritanceStrategy strategy;
     private AccessType accessType;
     private boolean isEmbeddableSuperclass;
+    private List<XClass> mappedSuperClasses;
+    private MetadataContext metadataContext;
 
     public InheritanceState(XClass xClass,
                             Map<XClass, InheritanceState> inheritanceStateMap,
                             MetadataContext metadataContext) {
         this.xClass = xClass;
         this.inheritanceStateMap = inheritanceStateMap;
+        this.mappedSuperClasses = new ArrayList<>();
+        this.metadataContext = metadataContext;
         determineInheritanceStrategy();
     }
 
@@ -75,7 +82,7 @@ public class InheritanceState {
      *
      * @return
      */
-    public void determineInheritanceStrategy() {
+    private void determineInheritanceStrategy() {
         Inheritance inheritanceAnnotation = xClass.getAnnotation(Inheritance.class);
         MappedSuperClass mappedSuperClassAnnotation = xClass.getAnnotation(MappedSuperClass.class);
         if(mappedSuperClassAnnotation != null) {
@@ -131,5 +138,34 @@ public class InheritanceState {
         return null;
     }
 
+    /**
+     * Get the mapped super classes for this element's class.
+     */
+    private List<XClass> getMappedSuperClasses()  {
+        if(mappedSuperClasses.size() != 0) {
+            return mappedSuperClasses;
+        }
+
+        XClass currentClass = xClass;
+        InheritanceState superClassInheritanceState;
+        ReflectionManager reflectionManager = metadataContext.getReflectionManager();
+        while (true) {
+            mappedSuperClasses.add(0, currentClass);
+            XClass superClass = currentClass;
+            while (true) {
+                superClass = superClass.getSuperclass();
+                superClassInheritanceState = inheritanceStateMap.get(superClass);
+                if(superClass == null || superClassInheritanceState != null || reflectionManager.equals(superClass, Object.class)) {
+                    break;
+                }
+            }
+            currentClass = superClass;
+            if(superClassInheritanceState == null || !superClassInheritanceState.isEmbeddableSuperclass()) {
+                break;
+            }
+        }
+
+        return mappedSuperClasses;
+    }
 
 }

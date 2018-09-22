@@ -42,45 +42,32 @@ public class AnnotationBinder {
             throw new AnnotationException("A model cannot has both @Model and @MappedSuperClass" + xClass.getName());
         }
 
+        /* get the class's inheritance state and type */
         InheritanceState inheritanceState = inheritanceStateMap.get(xClass);
         AnnotatedClassType annotatedClassType = metadataContext.getMetadataCollector().getClassType(xClass);
 
-        if(isModelClassType(annotatedClassType, xClass)) {
+        /* if class type is a model */
+        if(BinderHelper.isModelClassType(annotatedClassType, xClass)) {
+            /* if class has an super model, get its persistent class  */
             PersistentClass superModelPersistentClass = getSuperModelPersistentClass(xClass,
                     inheritanceStateMap,
                     inheritanceState,
                     metadataContext);
+            /* create a persistent class for class */
             PersistentClass persistentClass = createPersistentClass(inheritanceState, superModelPersistentClass, metadataContext);
 
             Model modelAnnotation = xClass.getAnnotation(Model.class);
             ModelBinder modelBinder = new ModelBinder(xClass, modelAnnotation, persistentClass, metadataContext);
             modelBinder.setInheritanceState(inheritanceState);
+            /* bind the model */
             modelBinder.bindModel();
 
+
+
+            /* add to metadata collector */
             metadataContext.getMetadataCollector().addModelBinding(persistentClass);
         }
 
-    }
-
-    /**
-     * Get the if the annotated class is a Model class.
-     *
-     * @param xClass annotated class
-     * @return if the annotated class is a Model class, it returns
-     *         true. Otherwise it returns false.
-     */
-    public static boolean isModelClassType(AnnotatedClassType annotatedClassType, XClass xClass) {
-        if(annotatedClassType == AnnotatedClassType.NONE
-                || annotatedClassType == AnnotatedClassType.EMBEDDABLE
-                || annotatedClassType == AnnotatedClassType.EMBEDDABLE_SUPERCLASS) {
-            return false;
-        }
-
-        if(!xClass.isAnnotationPresent(Model.class)) {
-            throw new AnnotationException("Annotated class should have only a @Model, @Embeddable or @MappedSuperClass: " +
-                    xClass.getName());
-        }
-        return true;
     }
 
     /**
