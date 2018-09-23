@@ -10,6 +10,7 @@ import org.codnect.firesnap.annotation.MappedSuperClass;
 import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.exception.AnnotationException;
 import org.codnect.firesnap.exception.MappingException;
+import org.codnect.firesnap.mapping.PropertyContainer;
 import org.codnect.firesnap.mapping.PropertyDataCollector;
 import org.codnect.firesnap.reflection.ReflectionManager;
 import org.codnect.firesnap.reflection.XClass;
@@ -227,6 +228,12 @@ public class InheritanceState {
             }
             accessType = getDefaultAccessType();
             getMappedSuperClasses();
+            propertyDataCollector = new PropertyDataCollector();
+            for(XClass xClass : mappedSuperClasses) {
+                PropertyContainer propertyContainer = new PropertyContainer(xClass, this.xClass, accessType);
+                propertyContainer.processProperties();
+            }
+
         }
     }
 

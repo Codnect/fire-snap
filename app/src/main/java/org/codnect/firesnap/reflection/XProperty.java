@@ -35,7 +35,7 @@ public class XProperty extends XMember {
         if(!(member instanceof Field) && !(member instanceof Method)) {
             throw new IllegalArgumentException("The member should be a Field or Method instance for XProperty");
         }
-        Type type = null;
+        Type type;
         if(member instanceof Field) {
             type = typeBinder.bind(((Field)member).getGenericType());
         } else {
