@@ -2,7 +2,6 @@ package org.codnect.firesnap.core;
 
 import org.codnect.firesnap.annotation.Access;
 import org.codnect.firesnap.annotation.AccessType;
-import org.codnect.firesnap.annotation.EmbeddedId;
 import org.codnect.firesnap.annotation.Id;
 import org.codnect.firesnap.annotation.Inheritance;
 import org.codnect.firesnap.annotation.InheritanceStrategy;
@@ -10,13 +9,16 @@ import org.codnect.firesnap.annotation.MappedSuperClass;
 import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.exception.AnnotationException;
 import org.codnect.firesnap.exception.MappingException;
+import org.codnect.firesnap.mapping.PropertyBasicData;
 import org.codnect.firesnap.mapping.PropertyContainer;
+import org.codnect.firesnap.mapping.PropertyData;
 import org.codnect.firesnap.mapping.PropertyDataCollector;
 import org.codnect.firesnap.reflection.ReflectionManager;
 import org.codnect.firesnap.reflection.XClass;
 import org.codnect.firesnap.reflection.XProperty;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -137,12 +139,12 @@ public class InheritanceState {
             if((xClass.isAnnotationPresent(Model.class) || xClass.isAnnotationPresent(MappedSuperClass.class))
                     && (xClass.getSuperclass() == null || reflectionManager.equals(xClass.getSuperclass(), Object.class))){
                 for(XProperty xProperty : xClass.getDeclaredMethodProperties()) {
-                    if(xProperty.isAnnotationPresent(Id.class) || xProperty.isAnnotationPresent(EmbeddedId.class)) {
+                    if(xProperty.isAnnotationPresent(Id.class) /* || xProperty.isAnnotationPresent(EmbeddedId.class) */) {
                         return AccessType.METHOD;
                     }
                 }
                 for(XProperty xProperty : xClass.getDeclaredFieldProperties()) {
-                    if(xProperty.isAnnotationPresent(Id.class) || xProperty.isAnnotationPresent(EmbeddedId.class)) {
+                    if(xProperty.isAnnotationPresent(Id.class) /* || xProperty.isAnnotationPresent(EmbeddedId.class) */) {
                         return AccessType.FIELD;
                     }
                 }
@@ -220,7 +222,7 @@ public class InheritanceState {
     /**
      *
      */
-    private void getPropertiesData() {
+    public PropertyDataCollector getPropertyDataCollector() {
         if(propertyDataCollector == null) {
             InheritanceState inheritanceState = inheritanceStateMap.get(xClass);
             if(inheritanceState.isEmbeddableSuperclass()) {
@@ -232,8 +234,28 @@ public class InheritanceState {
             for(XClass xClass : mappedSuperClasses) {
                 PropertyContainer propertyContainer = new PropertyContainer(xClass, this.xClass, accessType);
                 propertyContainer.processProperties();
+                addPropertiesOfClass(propertyContainer);
             }
+        }
+        return propertyDataCollector;
+    }
 
+    /**
+     *
+     * @param propertyContainer
+     */
+    private void addPropertiesOfClass(PropertyContainer propertyContainer) {
+        Collection<XProperty> properties = propertyContainer.getProperties();
+        for(XProperty xProperty : properties) {
+            for(PropertyData propertyData : propertyDataCollector.getPropertyDataList()) {
+                if(propertyData.getPropertyName().equals(xProperty.getName())) {
+                    return;
+                }
+            }
+            XClass declaringClass = propertyContainer.getDeclaringClass();
+            AccessType defaultAccessType = propertyContainer.getClassLevelAccessType();
+            PropertyData propertyData = new PropertyBasicData(xProperty, defaultAccessType, declaringClass);
+            propertyDataCollector.addPropertyData(propertyData);
         }
     }
 

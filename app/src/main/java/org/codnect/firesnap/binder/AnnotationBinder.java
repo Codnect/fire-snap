@@ -11,6 +11,9 @@ import org.codnect.firesnap.exception.MappingException;
 import org.codnect.firesnap.exception.PersistenceException;
 import org.codnect.firesnap.mapping.JoinedSubclass;
 import org.codnect.firesnap.mapping.PersistentClass;
+import org.codnect.firesnap.mapping.PropertyContainer;
+import org.codnect.firesnap.mapping.PropertyData;
+import org.codnect.firesnap.mapping.PropertyDataCollector;
 import org.codnect.firesnap.mapping.RootClass;
 import org.codnect.firesnap.mapping.SingleNodeSubclass;
 import org.codnect.firesnap.mapping.UnionSubclass;
@@ -55,15 +58,16 @@ public class AnnotationBinder {
                     metadataContext);
             /* create a persistent class for class */
             PersistentClass persistentClass = createPersistentClass(inheritanceState, superModelPersistentClass, metadataContext);
-
+            /* create a model binder to bind the model */
             Model modelAnnotation = xClass.getAnnotation(Model.class);
             ModelBinder modelBinder = new ModelBinder(xClass, modelAnnotation, persistentClass, metadataContext);
             modelBinder.setInheritanceState(inheritanceState);
             /* bind the model */
             modelBinder.bindModel();
-
-
-
+            /* get all properties */
+            PropertyDataCollector propertyDataCollector = inheritanceState.getPropertyDataCollector();
+            /* process the property annotations */
+            processPropertyAnnotations(propertyDataCollector, persistentClass, modelBinder, inheritanceStateMap, metadataContext);
             /* add to metadata collector */
             metadataContext.getMetadataCollector().addModelBinding(persistentClass);
         }
@@ -163,4 +167,21 @@ public class AnnotationBinder {
         throw new PersistenceException("Unknown inheritance strategy : " + inheritanceState.getStrategy());
     }
 
+    /**
+     *
+     * @param propertyDataCollector
+     * @param persistentClass
+     * @param modelBinder
+     * @param inheritanceStateMap
+     * @param metadataContext
+     */
+    private static void processPropertyAnnotations(PropertyDataCollector propertyDataCollector,
+                                                   PersistentClass persistentClass,
+                                                   ModelBinder modelBinder,
+                                                   Map<XClass, InheritanceState> inheritanceStateMap,
+                                                   MetadataContext metadataContext) {
+        for(PropertyData propertyData : propertyDataCollector.getPropertyDataList()) {
+            /* ... */
+        }
+    }
 }
