@@ -167,6 +167,7 @@ public class InheritanceState {
             if (superClassState != null) {
                 return superClassState;
             }
+            superClass = superClass.getSuperclass();
         }
         return null;
     }
