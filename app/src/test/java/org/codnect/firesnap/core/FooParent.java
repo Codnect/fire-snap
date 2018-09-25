@@ -1,5 +1,7 @@
 package org.codnect.firesnap.core;
 
+import org.codnect.firesnap.annotation.Access;
+import org.codnect.firesnap.annotation.AccessType;
 import org.codnect.firesnap.annotation.MappedSuperClass;
 
 /**
@@ -8,6 +10,19 @@ import org.codnect.firesnap.annotation.MappedSuperClass;
  * @author Burak Koken
  */
 @MappedSuperClass
-public class FooParent extends Foo{
+@Access(AccessType.METHOD)
+public class FooParent {
+
+    @Access(AccessType.FIELD)
+    private int idField;
+    private String nameField;
+
+    public int getIdMethod() {
+        return 0;
+    }
+
+    public String getNameMethod() {
+        return null;
+    }
 
 }

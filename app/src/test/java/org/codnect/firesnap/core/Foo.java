@@ -1,5 +1,7 @@
 package org.codnect.firesnap.core;
 
+import org.codnect.firesnap.annotation.Access;
+import org.codnect.firesnap.annotation.AccessType;
 import org.codnect.firesnap.annotation.Model;
 
 /**
@@ -8,6 +10,19 @@ import org.codnect.firesnap.annotation.Model;
  * @author Burak Koken
  */
 @Model
-public class Foo {
+@Access(AccessType.FIELD)
+public class Foo extends FooParent{
+
+    private int idField;
+    private String nameField;
+
+    @Access(AccessType.METHOD)
+    public int getIdMethod() {
+        return 0;
+    }
+
+    public String getNameMethod() {
+        return null;
+    }
 
 }
