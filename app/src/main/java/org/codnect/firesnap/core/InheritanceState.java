@@ -187,6 +187,7 @@ public class InheritanceState {
             if (superClassState != null && !superClassState.isEmbeddableSuperclass()) {
                 return superClassState;
             }
+            superClass = superClass.getSuperclass();
         }
         return null;
     }

@@ -13,8 +13,8 @@ import static junit.framework.Assert.*;
  */
 public class MetadataCollectorTest {
 
-    private static ReflectionManager reflectionManager;
-    private static MetadataCollector collector;
+    private ReflectionManager reflectionManager;
+    private MetadataCollector collector;
 
     @Before
     public void initTestObjects() {
