@@ -14,14 +14,14 @@ import org.codnect.firesnap.annotation.MappedSuperClass;
 public class FooParent {
 
     @Access(AccessType.FIELD)
-    private int idField;
-    private String nameField;
+    private int parentIdField;
+    private String parentNameField;
 
-    public int getIdMethod() {
+    public int getParentIdMethod() {
         return 0;
     }
 
-    public String getNameMethod() {
+    public String getParentNameMethod() {
         return null;
     }
 

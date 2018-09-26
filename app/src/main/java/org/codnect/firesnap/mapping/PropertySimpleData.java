@@ -10,17 +10,17 @@ import org.codnect.firesnap.reflection.XProperty;
  *
  * @author Burak Koken
  */
-public class PropertyBasicData implements PropertyData{
+public class PropertySimpleData implements PropertyData{
 
     private XProperty xProperty;
-    private AccessType defaulAccessType;
+    private AccessType defaultAccessType;
     private XClass declaringClass;
 
-    public PropertyBasicData(XProperty xProperty,
-                             AccessType defaultAccessType,
-                             XClass declaringClass) {
+    public PropertySimpleData(XProperty xProperty,
+                              AccessType defaultAccessType,
+                              XClass declaringClass) {
         this.xProperty = xProperty;
-        this.defaulAccessType = defaultAccessType;
+        this.defaultAccessType = defaultAccessType;
         this.declaringClass = declaringClass;
     }
 
@@ -46,7 +46,7 @@ public class PropertyBasicData implements PropertyData{
 
     @Override
     public AccessType getDefaultAccess() {
-        AccessType accessType = defaulAccessType;
+        AccessType accessType = defaultAccessType;
         if(xProperty.isAnnotationPresent(Access.class)) {
             accessType = xProperty.getAnnotation(Access.class).value();
         }
