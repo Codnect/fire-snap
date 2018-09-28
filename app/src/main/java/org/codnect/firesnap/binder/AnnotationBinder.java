@@ -1,5 +1,9 @@
 package org.codnect.firesnap.binder;
 
+import android.util.Log;
+
+import org.codnect.firesnap.annotation.Discriminator;
+import org.codnect.firesnap.annotation.DiscriminatorValue;
 import org.codnect.firesnap.annotation.InheritanceStrategy;
 import org.codnect.firesnap.annotation.MappedSuperClass;
 import org.codnect.firesnap.annotation.Model;
@@ -9,11 +13,14 @@ import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.exception.AnnotationException;
 import org.codnect.firesnap.exception.MappingException;
 import org.codnect.firesnap.exception.PersistenceException;
+import org.codnect.firesnap.mapping.DiscriminatorProperty;
 import org.codnect.firesnap.mapping.JoinedSubclass;
 import org.codnect.firesnap.mapping.PersistentClass;
 import org.codnect.firesnap.mapping.PropertyContainer;
 import org.codnect.firesnap.mapping.PropertyData;
 import org.codnect.firesnap.mapping.PropertyDataCollector;
+import org.codnect.firesnap.mapping.PropertyHolder;
+import org.codnect.firesnap.mapping.PropertyHolderFactory;
 import org.codnect.firesnap.mapping.RootClass;
 import org.codnect.firesnap.mapping.SingleNodeSubclass;
 import org.codnect.firesnap.mapping.UnionSubclass;
@@ -62,6 +69,12 @@ public class AnnotationBinder {
             Model modelAnnotation = xClass.getAnnotation(Model.class);
             ModelBinder modelBinder = new ModelBinder(xClass, modelAnnotation, persistentClass, metadataContext);
             modelBinder.setInheritanceState(inheritanceState);
+            /* process discriminator property */
+            DiscriminatorProperty discriminatorProperty = processDiscriminatorProperty(
+                    xClass,
+                    inheritanceState,
+                    modelBinder,
+                    metadataContext);
             /* bind the model */
             modelBinder.bindModel();
             /* get all properties */
@@ -165,6 +178,39 @@ public class AnnotationBinder {
         }
 
         throw new PersistenceException("Unknown inheritance strategy : " + inheritanceState.getStrategy());
+    }
+
+    /**
+     *
+     * @param xClass
+     * @param inheritanceState
+     * @param modelBinder
+     * @param metadataContext
+     * @return
+     */
+    private static DiscriminatorProperty processDiscriminatorProperty(XClass xClass,
+                                                                      InheritanceState inheritanceState,
+                                                                      ModelBinder modelBinder,
+                                                                      MetadataContext metadataContext) {
+        DiscriminatorProperty discriminatorProperty = null;
+        Discriminator discriminatorAnnotation = xClass.getAnnotation(Discriminator.class);
+        if(inheritanceState.getStrategy() == InheritanceStrategy.SINGLE_NODE) {
+            if(!inheritanceState.hasParents()) {
+                discriminatorProperty = DiscriminatorProperty.createDiscriminatorProperty(discriminatorAnnotation, metadataContext);
+            }
+            if(discriminatorAnnotation != null && !inheritanceState.hasParents()) {
+                Log.w(LOG_TAG, "Discriminator annotation can only be used in the root model, it is ignored for subclass : "
+                        + xClass.getName());
+            }
+            String discriminatorValue = null;
+            if(xClass.isAnnotationPresent(DiscriminatorValue.class)) {
+                discriminatorValue = xClass.getAnnotation(DiscriminatorValue.class).value();
+            }
+            modelBinder.setDiscriminatorValue(discriminatorValue);
+        } else if(inheritanceState.getStrategy() == InheritanceStrategy.JOINED) {
+            /* ... */
+        }
+        return discriminatorProperty;
     }
 
     /**

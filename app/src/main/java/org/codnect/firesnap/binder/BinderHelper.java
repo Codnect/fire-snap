@@ -1,9 +1,7 @@
 package org.codnect.firesnap.binder;
 
-import org.codnect.firesnap.annotation.InheritanceStrategy;
 import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.core.AnnotatedClassType;
-import org.codnect.firesnap.core.InheritanceState;
 import org.codnect.firesnap.exception.AnnotationException;
 import org.codnect.firesnap.reflection.XClass;
 

@@ -19,6 +19,7 @@ public class ModelBinder {
     private MetadataContext metadataContext;
     private PersistentClass persistentClass;
     private InheritanceState inheritanceState;
+    private String discriminatorValue;
 
     public ModelBinder(XClass annotatedClass, Model modelAnnotation, PersistentClass persistentClass,
                        MetadataContext metadataContext) {
@@ -50,7 +51,20 @@ public class ModelBinder {
         }
     }
 
+    public InheritanceState getInheritanceState() {
+        return inheritanceState;
+    }
+
     public void setInheritanceState(InheritanceState inheritanceState) {
         this.inheritanceState = inheritanceState;
     }
+
+    public String getDiscriminatorValue() {
+        return discriminatorValue;
+    }
+
+    public void setDiscriminatorValue(String discriminatorValue) {
+        this.discriminatorValue = discriminatorValue;
+    }
+
 }
