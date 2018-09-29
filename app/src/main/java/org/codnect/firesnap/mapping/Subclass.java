@@ -7,7 +7,7 @@ import org.codnect.firesnap.core.MetadataContext;
  *
  * @author Burak Koken
  */
-public class Subclass extends PersistentClass {
+public abstract class Subclass extends PersistentClass {
 
     private PersistentClass superModel;
 

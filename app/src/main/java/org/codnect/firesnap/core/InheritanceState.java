@@ -92,6 +92,14 @@ public class InheritanceState {
         isEmbeddableSuperclass = embeddableSuperclass;
     }
 
+    public boolean hasNode() {
+        return !hasParents || strategy != InheritanceStrategy.SINGLE_NODE;
+    }
+
+    public boolean hasDenormalizedNode() {
+        return hasParents() && strategy == InheritanceStrategy.NODE_PER_CLASS;
+    }
+
     /**
      *
      * @return

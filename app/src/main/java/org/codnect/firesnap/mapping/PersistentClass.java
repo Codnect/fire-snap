@@ -12,6 +12,7 @@ public abstract class PersistentClass {
     private String aliasName;
     private String modelName;
     private String className;
+    private boolean isAbstract;
     private MetadataContext metadataContext;
 
     public PersistentClass(MetadataContext metadataContext) {
@@ -71,5 +72,39 @@ public abstract class PersistentClass {
     public void setClassName(String className) {
         this.className = className;
     }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isAbstract() {
+        return isAbstract;
+    }
+
+    /**
+     *
+     * @param isAbstract
+     */
+    public void setAbstract(boolean isAbstract) {
+        this.isAbstract = isAbstract;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public abstract boolean isNodeOwner();
+
+    /**
+     *
+     * @param node
+     */
+    public abstract void setNode(Node node);
+
+    /**
+     *
+     * @return
+     */
+    public abstract Node getNode();
 
 }

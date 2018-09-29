@@ -7,10 +7,27 @@ import org.codnect.firesnap.core.MetadataContext;
  *
  * @author Burak Koken
  */
-public class JoinedSubclass extends Subclass{
+public class JoinedSubclass extends Subclass {
+
+    private Node node;
 
     public JoinedSubclass(MetadataContext metadataContext, PersistentClass superModel) {
         super(metadataContext, superModel);
+    }
+
+    @Override
+    public boolean isNodeOwner() {
+        return true;
+    }
+
+    @Override
+    public void setNode(Node node) {
+        this.node = node;
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
     }
 
 }

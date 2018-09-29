@@ -7,10 +7,25 @@ import org.codnect.firesnap.core.MetadataContext;
  *
  * @author Burak Koken
  */
-public class SingleNodeSubclass extends Subclass{
+public class SingleNodeSubclass extends Subclass {
 
     public SingleNodeSubclass(MetadataContext metadataContext, PersistentClass superModel) {
         super(metadataContext, superModel);
+    }
+
+    @Override
+    public boolean isNodeOwner() {
+        return false;
+    }
+
+    @Override
+    public void setNode(Node node) {
+
+    }
+
+    @Override
+    public Node getNode() {
+        return null;
     }
 
 }

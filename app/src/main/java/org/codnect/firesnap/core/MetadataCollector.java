@@ -4,6 +4,7 @@ import org.codnect.firesnap.annotation.Embeddable;
 import org.codnect.firesnap.annotation.MappedSuperClass;
 import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.exception.MappingException;
+import org.codnect.firesnap.mapping.Node;
 import org.codnect.firesnap.mapping.PersistentClass;
 import org.codnect.firesnap.reflection.XClass;
 
@@ -20,11 +21,13 @@ public class MetadataCollector {
     private Map<String, String> modelAliasNames;
     private Map<String, PersistentClass> modelBindingMap;
     private Map<String, AnnotatedClassType> annotatedClassTypeMap;
+    private Map<String, ModelNodeReference> modelNodeReferenceMap;
 
     public MetadataCollector() {
         modelAliasNames = new HashMap<>();
         modelBindingMap = new HashMap<>();
         annotatedClassTypeMap = new HashMap<>();
+        modelNodeReferenceMap = new HashMap<>();
     }
 
     /**
@@ -87,6 +90,36 @@ public class MetadataCollector {
             annotatedClassTypeMap.put(xClass.getName(), annotatedClassType);
         }
         return annotatedClassType;
+    }
+
+    /**
+     *
+     * @param modelName
+     * @param nodeName
+     * @param node
+     * @param superModelNodeReference
+     * @return
+     */
+    public ModelNodeReference addModelNodeReference(String modelName,
+                                                    String nodeName,
+                                                    Node node,
+                                                    ModelNodeReference superModelNodeReference) {
+        ModelNodeReference modelNodeReference = new ModelNodeReference(
+                nodeName,
+                node,
+                superModelNodeReference
+        );
+        modelNodeReferenceMap.put(modelName, modelNodeReference);
+        return modelNodeReference;
+    }
+
+    /**
+     *
+     * @param modelName
+     * @return
+     */
+    public ModelNodeReference getModelNodeReference(String modelName) {
+        return modelNodeReferenceMap.get(modelName);
     }
 
 }
