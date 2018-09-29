@@ -7,4 +7,27 @@ package org.codnect.firesnap.mapping;
  */
 public class Node {
 
+    private String name;
+    private boolean isAbstract;
+
+    public Node(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isAbstract() {
+        return isAbstract;
+    }
+
+    public void setAbstract(boolean isAbstract) {
+        this.isAbstract = isAbstract;
+    }
+
 }

@@ -11,16 +11,36 @@ public class ModelNodeReference {
 
     private String nodeName;
     private Node node;
-    private ModelNodeReference supModelNodeReference;
+    private ModelNodeReference superModelNodeReference;
 
     public ModelNodeReference(String nodeName, Node node, ModelNodeReference superModelNodeReference) {
         this.nodeName = nodeName;
         this.node = node;
-        this.supModelNodeReference = superModelNodeReference;
+        this.superModelNodeReference = superModelNodeReference;
     }
 
+    /**
+     *
+     * @return
+     */
+    public String getNodeName() {
+        return nodeName;
+    }
+
+    /**
+     *
+     * @return
+     */
     public Node getNode() {
         return node;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public ModelNodeReference getSuperModelNodeReference() {
+        return superModelNodeReference;
     }
 
 }

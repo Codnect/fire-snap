@@ -15,7 +15,15 @@ public class NodeBinder {
                                 ModelNodeReference superModelNodeReference,
                                 boolean isAbstract,
                                 MetadataContext metadataContext) {
-        return null;
+
+        Node node;
+        if(superModelNodeReference != null) {
+            node = metadataContext.getMetadataCollector().addDenormalizedNode(nodeName, superModelNodeReference.getNode());
+        } else {
+            node = metadataContext.getMetadataCollector().addNode(nodeName);
+        }
+        node.setAbstract(isAbstract);
+        return node;
     }
 
 }

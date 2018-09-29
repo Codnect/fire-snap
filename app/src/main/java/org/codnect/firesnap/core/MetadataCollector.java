@@ -3,12 +3,16 @@ package org.codnect.firesnap.core;
 import org.codnect.firesnap.annotation.Embeddable;
 import org.codnect.firesnap.annotation.MappedSuperClass;
 import org.codnect.firesnap.annotation.Model;
+import org.codnect.firesnap.exception.DuplicateMappingException;
 import org.codnect.firesnap.exception.MappingException;
+import org.codnect.firesnap.mapping.DenormalizedNode;
 import org.codnect.firesnap.mapping.Node;
 import org.codnect.firesnap.mapping.PersistentClass;
 import org.codnect.firesnap.reflection.XClass;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,12 +26,14 @@ public class MetadataCollector {
     private Map<String, PersistentClass> modelBindingMap;
     private Map<String, AnnotatedClassType> annotatedClassTypeMap;
     private Map<String, ModelNodeReference> modelNodeReferenceMap;
+    private Map<String, Node> nodeMap;
 
     public MetadataCollector() {
         modelAliasNames = new HashMap<>();
         modelBindingMap = new HashMap<>();
         annotatedClassTypeMap = new HashMap<>();
         modelNodeReferenceMap = new HashMap<>();
+        nodeMap = new HashMap<>();
     }
 
     /**
@@ -55,7 +61,7 @@ public class MetadataCollector {
         String modelName = persistentClass.getModelName();
 
         if(modelBindingMap.containsKey(modelName)) {
-            throw new MappingException(modelName + " is duplicated.");
+            throw new DuplicateMappingException(modelName + " is duplicated.");
         }
 
         modelBindingMap.put(modelName, persistentClass);
@@ -120,6 +126,53 @@ public class MetadataCollector {
      */
     public ModelNodeReference getModelNodeReference(String modelName) {
         return modelNodeReferenceMap.get(modelName);
+    }
+
+    /**
+     *
+     * @param nodeName
+     * @return
+     */
+    public Node addNode(String nodeName) {
+        Node node = getNode(nodeName);
+        if(node != null) {
+            throw new DuplicateMappingException("Mapped already a node for specified node name");
+        }
+        node = new Node(nodeName);
+        nodeMap.put(nodeName, node);
+        return node;
+    }
+
+    /**
+     *
+     * @param nodeName
+     * @return
+     */
+    public Node addDenormalizedNode(String nodeName, Node superModelNode) {
+        Node node = getNode(nodeName);
+        if(node != null) {
+            throw new DuplicateMappingException("Mapped already a node for specified node name");
+        }
+        node = new DenormalizedNode(nodeName, superModelNode);
+        nodeMap.put(nodeName, node);
+        return node;
+    }
+
+    /**
+     *
+     * @param nodeName
+     * @return
+     */
+    public Node getNode(String nodeName) {
+        return nodeMap.get(nodeName);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Collection<Node> getAllNodes() {
+        return nodeMap.values();
     }
 
 }

@@ -7,6 +7,7 @@ import org.codnect.firesnap.core.ModelNodeReference;
 import org.codnect.firesnap.exception.MappingException;
 import org.codnect.firesnap.mapping.Node;
 import org.codnect.firesnap.mapping.PersistentClass;
+import org.codnect.firesnap.mapping.SingleNodeSubclass;
 import org.codnect.firesnap.reflection.XClass;
 import org.codnect.firesnap.util.StringHelper;
 
@@ -115,8 +116,25 @@ public class ModelBinder {
         if(persistentClass.isNodeOwner()) {
             persistentClass.setNode(node);
         } else {
-            throw new MappingException("You cannot bind a node for subclasses that have the single node strategy");
+            throw new MappingException("You cannot bind a node for subclasses that have the single node strategy : "
+                    + persistentClass.getClassName());
         }
+    }
+
+    /**
+     *
+     * @param superModelNodeReference
+     */
+    public void bindNodeForSingleNodeStrategySubClass(ModelNodeReference superModelNodeReference) {
+        if(!(persistentClass instanceof SingleNodeSubclass)) {
+            throw new MappingException("This class is not a SingleNodeSubclass instance : " + persistentClass.getClassName());
+        }
+        metadataContext.getMetadataCollector().addModelNodeReference(
+                persistentClass.getModelName(),
+                superModelNodeReference.getNodeName(),
+                superModelNodeReference.getNode(),
+                superModelNodeReference
+        );
     }
 
 }

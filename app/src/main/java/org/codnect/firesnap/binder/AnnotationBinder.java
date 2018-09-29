@@ -68,13 +68,15 @@ public class AnnotationBinder {
             Model modelAnnotation = xClass.getAnnotation(Model.class);
             ModelBinder modelBinder = new ModelBinder(xClass, modelAnnotation, persistentClass, metadataContext);
             modelBinder.setInheritanceState(inheritanceState);
+            /* bind the model */
+            modelBinder.bindModel();
             /* process discriminator property */
             DiscriminatorProperty discriminatorProperty = processDiscriminatorProperty(
                     xClass,
                     inheritanceState,
                     modelBinder,
                     metadataContext);
-            /* process node annotation */
+            /* bind the node */
             if(inheritanceState.hasNode()) {
                 String nodeName = "";
                 Node nodeAnnotation = xClass.getAnnotation(Node.class);
@@ -88,9 +90,16 @@ public class AnnotationBinder {
                     );
                 }
                 modelBinder.bindNode(nodeName, superModelNodeReference);
+            } else {
+                if(xClass.isAnnotationPresent(Node.class)) {
+                    Log.w(LOG_TAG, "Node annotation is ignored for subclasses that have single node strategy");
+                }
+                if(inheritanceState.getStrategy() ==  InheritanceStrategy.SINGLE_NODE) {
+                    modelBinder.bindNodeForSingleNodeStrategySubClass(
+                            metadataContext.getMetadataCollector().getModelNodeReference(superModelPersistentClass.getModelName())
+                    );
+                }
             }
-            /* bind the model */
-            modelBinder.bindModel();
             /* get all properties */
             PropertyDataCollector propertyDataCollector = inheritanceState.getPropertyDataCollector();
             /* process the property annotations */
