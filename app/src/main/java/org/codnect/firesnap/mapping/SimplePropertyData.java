@@ -10,13 +10,13 @@ import org.codnect.firesnap.reflection.XProperty;
  *
  * @author Burak Koken
  */
-public class PropertySimpleData implements PropertyData{
+public class SimplePropertyData implements PropertyData {
 
     private XProperty xProperty;
     private AccessType defaultAccessType;
     private XClass declaringClass;
 
-    public PropertySimpleData(XProperty xProperty,
+    public SimplePropertyData(XProperty xProperty,
                               AccessType defaultAccessType,
                               XClass declaringClass) {
         this.xProperty = xProperty;

@@ -1,8 +1,8 @@
-package org.codnect.firesnap.mapping;
+package org.codnect.firesnap.core;
 
 import org.codnect.firesnap.binder.ModelBinder;
-import org.codnect.firesnap.core.InheritanceState;
-import org.codnect.firesnap.core.MetadataContext;
+import org.codnect.firesnap.inheritance.PersistentClass;
+import org.codnect.firesnap.mapping.Node;
 import org.codnect.firesnap.reflection.XClass;
 
 import java.util.Map;

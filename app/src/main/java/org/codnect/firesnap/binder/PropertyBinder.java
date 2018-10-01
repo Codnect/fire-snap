@@ -3,7 +3,7 @@ package org.codnect.firesnap.binder;
 import org.codnect.firesnap.annotation.AccessType;
 import org.codnect.firesnap.core.InheritanceState;
 import org.codnect.firesnap.core.MetadataContext;
-import org.codnect.firesnap.mapping.PropertyHolder;
+import org.codnect.firesnap.core.PropertyHolder;
 import org.codnect.firesnap.reflection.XClass;
 
 import java.util.Map;

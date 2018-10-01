@@ -6,8 +6,8 @@ import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.core.ModelNodeReference;
 import org.codnect.firesnap.exception.MappingException;
 import org.codnect.firesnap.mapping.Node;
-import org.codnect.firesnap.mapping.PersistentClass;
-import org.codnect.firesnap.mapping.SingleNodeSubclass;
+import org.codnect.firesnap.inheritance.PersistentClass;
+import org.codnect.firesnap.inheritance.SingleNodeSubclass;
 import org.codnect.firesnap.reflection.XClass;
 import org.codnect.firesnap.util.StringHelper;
 

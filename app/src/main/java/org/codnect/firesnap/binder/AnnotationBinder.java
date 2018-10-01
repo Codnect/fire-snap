@@ -8,6 +8,8 @@ import org.codnect.firesnap.annotation.InheritanceStrategy;
 import org.codnect.firesnap.annotation.MappedSuperClass;
 import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.annotation.Node;
+import org.codnect.firesnap.annotation.OneToOne;
+import org.codnect.firesnap.annotation.Property;
 import org.codnect.firesnap.core.AnnotatedClassType;
 import org.codnect.firesnap.core.InheritanceState;
 import org.codnect.firesnap.core.MetadataContext;
@@ -16,14 +18,17 @@ import org.codnect.firesnap.exception.AnnotationException;
 import org.codnect.firesnap.exception.MappingException;
 import org.codnect.firesnap.exception.PersistenceException;
 import org.codnect.firesnap.mapping.DiscriminatorProperty;
-import org.codnect.firesnap.mapping.JoinedSubclass;
-import org.codnect.firesnap.mapping.PersistentClass;
+import org.codnect.firesnap.inheritance.JoinedSubclass;
+import org.codnect.firesnap.inheritance.PersistentClass;
 import org.codnect.firesnap.mapping.PropertyData;
 import org.codnect.firesnap.mapping.PropertyDataCollector;
-import org.codnect.firesnap.mapping.RootClass;
-import org.codnect.firesnap.mapping.SingleNodeSubclass;
-import org.codnect.firesnap.mapping.UnionSubclass;
+import org.codnect.firesnap.core.PropertyHolder;
+import org.codnect.firesnap.core.PropertyHolderFactory;
+import org.codnect.firesnap.inheritance.RootClass;
+import org.codnect.firesnap.inheritance.SingleNodeSubclass;
+import org.codnect.firesnap.inheritance.UnionSubclass;
 import org.codnect.firesnap.reflection.XClass;
+import org.codnect.firesnap.reflection.XProperty;
 
 import java.util.HashMap;
 import java.util.List;
@@ -102,8 +107,15 @@ public class AnnotationBinder {
             }
             /* get all properties */
             PropertyDataCollector propertyDataCollector = inheritanceState.getPropertyDataCollector();
+            /* create a property holder */
+            PropertyHolder propertyHolder = PropertyHolderFactory.createClassPropertyHolder(
+                    persistentClass,
+                    modelBinder,
+                    inheritanceStateMap,
+                    metadataContext
+            );
             /* process the property annotations */
-            processPropertyAnnotations(propertyDataCollector, persistentClass, modelBinder, inheritanceStateMap, metadataContext);
+            processPropertyAnnotations(propertyDataCollector, propertyHolder, persistentClass, modelBinder, inheritanceStateMap, metadataContext);
             /* add to metadata collector */
             metadataContext.getMetadataCollector().addModelBinding(persistentClass);
         }
@@ -243,12 +255,28 @@ public class AnnotationBinder {
      * @param metadataContext
      */
     private static void processPropertyAnnotations(PropertyDataCollector propertyDataCollector,
+                                                   PropertyHolder propertyHolder,
                                                    PersistentClass persistentClass,
                                                    ModelBinder modelBinder,
                                                    Map<XClass, InheritanceState> inheritanceStateMap,
                                                    MetadataContext metadataContext) {
         for(PropertyData propertyData : propertyDataCollector.getPropertyDataList()) {
-            /* ... */
+            PropertyBinder propertyBinder = new PropertyBinder(
+                    propertyData.getPropertyName(),
+                    propertyData.getDefaultAccess(),
+                    propertyData.getDeclaringClass(),
+                    modelBinder,
+                    null,
+                    inheritanceStateMap,
+                    metadataContext
+            );
+            XProperty property = propertyData.getProperty();
+            if(property.isAnnotationPresent(OneToOne.class)) {
+                if(property.isAnnotationPresent(Property.class)) {
+                    throw new AnnotationException("Property annotation not allowed for @OneToOne property");
+                }
+            }
         }
     }
+
 }

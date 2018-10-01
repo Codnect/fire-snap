@@ -1,4 +1,4 @@
-package org.codnect.firesnap.mapping;
+package org.codnect.firesnap.inheritance;
 
 import org.codnect.firesnap.core.MetadataContext;
 

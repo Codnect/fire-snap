@@ -4,15 +4,13 @@ import org.codnect.firesnap.annotation.Embeddable;
 import org.codnect.firesnap.annotation.MappedSuperClass;
 import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.exception.DuplicateMappingException;
-import org.codnect.firesnap.exception.MappingException;
 import org.codnect.firesnap.mapping.DenormalizedNode;
 import org.codnect.firesnap.mapping.Node;
-import org.codnect.firesnap.mapping.PersistentClass;
+import org.codnect.firesnap.inheritance.PersistentClass;
 import org.codnect.firesnap.reflection.XClass;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

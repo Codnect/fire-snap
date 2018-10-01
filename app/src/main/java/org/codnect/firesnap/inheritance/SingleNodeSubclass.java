@@ -1,6 +1,7 @@
-package org.codnect.firesnap.mapping;
+package org.codnect.firesnap.inheritance;
 
 import org.codnect.firesnap.core.MetadataContext;
+import org.codnect.firesnap.mapping.Node;
 
 /**
  * Created by Burak Koken on 20.5.2018.
