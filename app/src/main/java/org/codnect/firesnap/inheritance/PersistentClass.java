@@ -1,7 +1,11 @@
 package org.codnect.firesnap.inheritance;
 
 import org.codnect.firesnap.core.MetadataContext;
+import org.codnect.firesnap.exception.MappingException;
 import org.codnect.firesnap.mapping.Node;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Burak Koken on 20.5.2018.
@@ -14,10 +18,13 @@ public abstract class PersistentClass {
     private String modelName;
     private String className;
     private boolean isAbstract;
+    private List<Subclass> subclasses;
+    private String discriminatorValue;
     private MetadataContext metadataContext;
 
     public PersistentClass(MetadataContext metadataContext) {
         this.metadataContext = metadataContext;
+        this.subclasses = new ArrayList<>();
     }
 
     /**
@@ -107,5 +114,65 @@ public abstract class PersistentClass {
      * @return
      */
     public abstract Node getNode();
+
+    /**
+     *
+     * @return
+     */
+    public abstract PersistentClass getSuperClass();
+
+    /**
+     *
+     * @param subclass
+     */
+    public void addSubclass(Subclass subclass) {
+        PersistentClass superClass = getSuperClass();
+        while (superClass != null) {
+            if(superClass.getModelName().equals(subclass.getModelName())) {
+                throw new MappingException("Circular Mapping : " + subclass.getModelName());
+            }
+            superClass = superClass.getSuperClass();
+        }
+        subclasses.add(subclass);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean hasSubclasses() {
+        if(subclasses.size() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getDiscriminatorValue() {
+        return discriminatorValue;
+    }
+
+    /**
+     *
+     * @param discriminatorValue
+     */
+    public void setDiscriminatorValue(String discriminatorValue) {
+        this.discriminatorValue = discriminatorValue;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public abstract Node getRootNode();
+
+    /**
+     *
+     * @return
+     */
+    public abstract RootClass getRootClass();
 
 }
