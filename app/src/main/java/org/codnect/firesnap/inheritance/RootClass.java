@@ -11,6 +11,7 @@ import org.codnect.firesnap.mapping.Node;
 public class RootClass extends PersistentClass {
 
     private Node node;
+    private Class persisterClass;
 
     public RootClass(MetadataContext metadataContext) {
         super(metadataContext);
@@ -29,6 +30,31 @@ public class RootClass extends PersistentClass {
     @Override
     public Node getNode() {
         return node;
+    }
+
+    @Override
+    public PersistentClass getSuperModelClass() {
+        return null;
+    }
+
+    @Override
+    public Node getRootNode() {
+        return node;
+    }
+
+    @Override
+    public RootClass getRootClass() {
+        return this;
+    }
+
+    @Override
+    public Class getPersisterClass() {
+        return persisterClass;
+    }
+
+    @Override
+    public void setPersisterClass(Class persisterClass) {
+        this.persisterClass = persisterClass;
     }
 
 }

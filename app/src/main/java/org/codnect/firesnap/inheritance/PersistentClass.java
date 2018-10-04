@@ -119,19 +119,19 @@ public abstract class PersistentClass {
      *
      * @return
      */
-    public abstract PersistentClass getSuperClass();
+    public abstract PersistentClass getSuperModelClass();
 
     /**
      *
      * @param subclass
      */
     public void addSubclass(Subclass subclass) {
-        PersistentClass superClass = getSuperClass();
+        PersistentClass superClass = getSuperModelClass();
         while (superClass != null) {
             if(superClass.getModelName().equals(subclass.getModelName())) {
                 throw new MappingException("Circular Mapping : " + subclass.getModelName());
             }
-            superClass = superClass.getSuperClass();
+            superClass = superClass.getSuperModelClass();
         }
         subclasses.add(subclass);
     }
@@ -174,5 +174,16 @@ public abstract class PersistentClass {
      * @return
      */
     public abstract RootClass getRootClass();
+
+    /**
+     *
+     * @return
+     */
+    public abstract Class getPersisterClass();
+
+    /**
+     *
+     */
+    public abstract void setPersisterClass(Class persisterClass);
 
 }
