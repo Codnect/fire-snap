@@ -9,12 +9,12 @@ import org.codnect.firesnap.core.MetadataContext;
  *
  * @author Burak Koken
  */
-public class DiscriminatorProperty extends Property{
+public class DiscriminatorNodeProperty extends NodeProperty {
 
     public static final String DEFAULT_PROPERTY_VALUE = "DISCTYPE";
     private DiscriminatorType discriminatorType;
 
-    private DiscriminatorProperty(MetadataContext metadataContext) {
+    private DiscriminatorNodeProperty(MetadataContext metadataContext) {
         super(metadataContext);
     }
 
@@ -24,20 +24,20 @@ public class DiscriminatorProperty extends Property{
      * @param metadataContext
      * @return
      */
-    public static DiscriminatorProperty createDiscriminatorProperty(Discriminator discriminatorAnnotation,
-                                                                    MetadataContext metadataContext) {
-        DiscriminatorProperty discriminatorProperty = new DiscriminatorProperty(metadataContext);
+    public static DiscriminatorNodeProperty createDiscriminatorProperty(Discriminator discriminatorAnnotation,
+                                                                        MetadataContext metadataContext) {
+        DiscriminatorNodeProperty discriminatorNodeProperty = new DiscriminatorNodeProperty(metadataContext);
         if(discriminatorAnnotation != null) {
-            discriminatorProperty.setDiscriminatorType(discriminatorAnnotation.discriminatorType());
+            discriminatorNodeProperty.setDiscriminatorType(discriminatorAnnotation.discriminatorType());
             String propertyName = discriminatorAnnotation.name();
             if(propertyName == null) {
-                discriminatorProperty.setName(DEFAULT_PROPERTY_VALUE);
+                discriminatorNodeProperty.setName(DEFAULT_PROPERTY_VALUE);
             }
         } else {
-            discriminatorProperty.setDiscriminatorType(DiscriminatorType.STRING);
-            discriminatorProperty.setName(DEFAULT_PROPERTY_VALUE);
+            discriminatorNodeProperty.setDiscriminatorType(DiscriminatorType.STRING);
+            discriminatorNodeProperty.setName(DEFAULT_PROPERTY_VALUE);
         }
-        return discriminatorProperty;
+        return discriminatorNodeProperty;
     }
 
     /**

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.codnect.firesnap.annotation.Discriminator;
 import org.codnect.firesnap.annotation.DiscriminatorValue;
+import org.codnect.firesnap.annotation.Id;
 import org.codnect.firesnap.annotation.InheritanceStrategy;
 import org.codnect.firesnap.annotation.MappedSuperClass;
 import org.codnect.firesnap.annotation.Model;
@@ -17,7 +18,7 @@ import org.codnect.firesnap.core.ModelNodeReference;
 import org.codnect.firesnap.exception.AnnotationException;
 import org.codnect.firesnap.exception.MappingException;
 import org.codnect.firesnap.exception.PersistenceException;
-import org.codnect.firesnap.mapping.DiscriminatorProperty;
+import org.codnect.firesnap.mapping.DiscriminatorNodeProperty;
 import org.codnect.firesnap.inheritance.JoinedSubclass;
 import org.codnect.firesnap.inheritance.PersistentClass;
 import org.codnect.firesnap.mapping.PropertyData;
@@ -76,7 +77,7 @@ public class AnnotationBinder {
             /* bind the model */
             modelBinder.bindModel();
             /* process discriminator property */
-            DiscriminatorProperty discriminatorProperty = processDiscriminatorProperty(
+            DiscriminatorNodeProperty discriminatorNodeProperty = processDiscriminatorProperty(
                     xClass,
                     inheritanceState,
                     modelBinder,
@@ -223,15 +224,15 @@ public class AnnotationBinder {
      * @param metadataContext
      * @return
      */
-    private static DiscriminatorProperty processDiscriminatorProperty(XClass xClass,
-                                                                      InheritanceState inheritanceState,
-                                                                      ModelBinder modelBinder,
-                                                                      MetadataContext metadataContext) {
-        DiscriminatorProperty discriminatorProperty = null;
+    private static DiscriminatorNodeProperty processDiscriminatorProperty(XClass xClass,
+                                                                          InheritanceState inheritanceState,
+                                                                          ModelBinder modelBinder,
+                                                                          MetadataContext metadataContext) {
+        DiscriminatorNodeProperty discriminatorProperty = null;
         Discriminator discriminatorAnnotation = xClass.getAnnotation(Discriminator.class);
         if(inheritanceState.getStrategy() == InheritanceStrategy.SINGLE_NODE || inheritanceState.getStrategy() == InheritanceStrategy.JOINED) {
             if(!inheritanceState.hasParents()) {
-                discriminatorProperty = DiscriminatorProperty.createDiscriminatorProperty(discriminatorAnnotation, metadataContext);
+                discriminatorProperty = DiscriminatorNodeProperty.createDiscriminatorProperty(discriminatorAnnotation, metadataContext);
             }
             else if(discriminatorAnnotation != null && !inheritanceState.hasParents()) {
                 Log.w(LOG_TAG, "Discriminator annotation can only be used in the root model, it is ignored for subclass : "
@@ -261,16 +262,17 @@ public class AnnotationBinder {
                                                    Map<XClass, InheritanceState> inheritanceStateMap,
                                                    MetadataContext metadataContext) {
         for(PropertyData propertyData : propertyDataCollector.getPropertyDataList()) {
-            PropertyBinder propertyBinder = new PropertyBinder(
-                    propertyData.getPropertyName(),
-                    propertyData.getDefaultAccess(),
-                    propertyData.getDeclaringClass(),
-                    modelBinder,
-                    null,
-                    inheritanceStateMap,
-                    metadataContext
-            );
+            PropertyBinder propertyBinder = new PropertyBinder(metadataContext);
+            propertyBinder.setPropertyName(propertyData.getPropertyName());
+            propertyBinder.setAccessType(propertyData.getDefaultAccess());
+            propertyBinder.setDeclaringClass(propertyData.getDeclaringClass());
+            propertyBinder.setInheritanceStateMap(inheritanceStateMap);
+            propertyBinder.setModelBinder(modelBinder);
+            propertyBinder.setPropertyHolder(propertyHolder);
             XProperty property = propertyData.getProperty();
+            if(property.isAnnotationPresent(Id.class)) {
+                propertyBinder.setIdProperty(true);
+            }
             if(property.isAnnotationPresent(OneToOne.class)) {
                 if(property.isAnnotationPresent(Property.class)) {
                     throw new AnnotationException("Property annotation not allowed for @OneToOne property");

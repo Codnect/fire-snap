@@ -21,22 +21,43 @@ public class PropertyBinder {
     private ModelBinder modelBinder;
     private PropertyHolder propertyHolder;
     private Map<XClass, InheritanceState> inheritanceStateMap;
+    private boolean isIdProperty;
     private MetadataContext metadataContext;
 
-    public PropertyBinder(String propertyName,
-                          AccessType accessType,
-                          XClass declaringClass,
-                          ModelBinder modelBinder,
-                          PropertyHolder propertyHolder,
-                          Map<XClass, InheritanceState> inheritanceStateMap,
-                          MetadataContext metadataContext) {
-        this.propertyName = propertyName;
-        this.accessType = accessType;
-        this.declaringClass = declaringClass;
-        this.modelBinder = modelBinder;
-        this.propertyHolder = propertyHolder;
-        this.inheritanceStateMap = inheritanceStateMap;
+    public PropertyBinder(MetadataContext metadataContext) {
         this.metadataContext = metadataContext;
+    }
+
+    public void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
+    }
+
+    public void setAccessType(AccessType accessType) {
+        this.accessType = accessType;
+    }
+
+    public void setDeclaringClass(XClass declaringClass) {
+        this.declaringClass = declaringClass;
+    }
+
+    public void setModelBinder(ModelBinder modelBinder) {
+        this.modelBinder = modelBinder;
+    }
+
+    public void setPropertyHolder(PropertyHolder propertyHolder) {
+        this.propertyHolder = propertyHolder;
+    }
+
+    public void setInheritanceStateMap(Map<XClass, InheritanceState> inheritanceStateMap) {
+        this.inheritanceStateMap = inheritanceStateMap;
+    }
+
+    public void setMetadataContext(MetadataContext metadataContext) {
+        this.metadataContext = metadataContext;
+    }
+
+    public void setIdProperty(boolean idProperty) {
+        isIdProperty = idProperty;
     }
 
 }

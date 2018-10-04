@@ -7,13 +7,13 @@ import org.codnect.firesnap.core.MetadataContext;
  *
  * @author Burak Koken
  */
-public class Property {
+public class NodeProperty {
 
     private String name;
     private boolean nullable;
     private MetadataContext metadataContext;
 
-    public Property(MetadataContext metadataContext) {
+    public NodeProperty(MetadataContext metadataContext) {
         nullable = true;
     }
 
