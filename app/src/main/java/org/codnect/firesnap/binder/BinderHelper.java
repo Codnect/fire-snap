@@ -17,11 +17,11 @@ public class BinderHelper {
      *
      * @param annotationValue annotation value
      * @return if annotation value is empty, it returns true
-     *         otherwise it returns false.
+     * otherwise it returns false.
      */
     public static boolean isEmptyAnnotationValue(String annotationValue) {
 
-        if(annotationValue != null && annotationValue.length() == 0) {
+        if (annotationValue != null && annotationValue.length() == 0) {
             return true;
         }
 
@@ -33,16 +33,16 @@ public class BinderHelper {
      *
      * @param xClass annotated class
      * @return if the annotated class is a Model class, it returns
-     *         true. Otherwise it returns false.
+     * true. Otherwise it returns false.
      */
     public static boolean isModelClassType(AnnotatedClassType annotatedClassType, XClass xClass) {
-        if(annotatedClassType == AnnotatedClassType.NONE
+        if (annotatedClassType == AnnotatedClassType.NONE
                 || annotatedClassType == AnnotatedClassType.EMBEDDABLE
                 || annotatedClassType == AnnotatedClassType.EMBEDDABLE_SUPERCLASS) {
             return false;
         }
 
-        if(!xClass.isAnnotationPresent(Model.class)) {
+        if (!xClass.isAnnotationPresent(Model.class)) {
             throw new AnnotationException("Annotated class should have only a @Model, @Embeddable or @MappedSuperClass: " +
                     xClass.getName());
         }

@@ -1,5 +1,6 @@
 package org.codnect.firesnap.mapping;
 
+import org.codnect.firesnap.annotation.JoinProperty;
 import org.codnect.firesnap.annotation.Property;
 import org.codnect.firesnap.binder.ModelBinder;
 import org.codnect.firesnap.core.MetadataContext;
@@ -37,6 +38,16 @@ public class NodePropertyBuilder {
     public void build() {
         if(property.isAnnotationPresent(Property.class)) {
             Property propertyAnnotation = property.getAnnotation(Property.class);
+            NodeProperty nodeProperty = NodeProperty.createNodePropertyFromAnnotation(
+                    propertyAnnotation,
+                    propertyData,
+                    propertyHolder,
+                    metadataContext
+            );
+        }
+        if(property.isAnnotationPresent(JoinProperty.class)) {
+            JoinProperty joinPropertyAnnotation = property.getAnnotation(JoinProperty.class);
+            NodeJoinProperty nodeJoinProperty = null;
         }
         /* code */
     }
