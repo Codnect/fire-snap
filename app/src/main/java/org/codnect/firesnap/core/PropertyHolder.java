@@ -1,6 +1,5 @@
 package org.codnect.firesnap.core;
 
-import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.inheritance.PersistentClass;
 import org.codnect.firesnap.mapping.Node;
 

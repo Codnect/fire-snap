@@ -16,4 +16,17 @@ public class StringHelper {
         return value == null || value.length() == 0;
     }
 
+    /**
+     *
+     * @param prefix
+     * @param name
+     * @return
+     */
+    public static String qualify(String prefix, String name) {
+        if ( name == null || prefix == null ) {
+            throw new IllegalArgumentException("Prefix or name parameters must not be null.");
+        }
+        return prefix + '.' + name;
+    }
+
 }

@@ -1,6 +1,7 @@
 package org.codnect.firesnap.mapping;
 
-import org.codnect.firesnap.annotation.Property;
+import org.codnect.firesnap.annotation.JoinProperty;
+import org.codnect.firesnap.binder.BinderHelper;
 import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.core.PropertyHolder;
 
@@ -15,11 +16,56 @@ public class NodeJoinProperty extends NodeProperty {
         super(metadataContext);
     }
 
-    public static NodeJoinProperty createNodeJoinPropertyFromAnnotation(Property propertyAnnotation,
+    /**
+     *
+     * @param joinPropertyAnnotation
+     */
+    public void setJoinPropertyAnnotation(JoinProperty joinPropertyAnnotation) {
+        if(!BinderHelper.isEmptyAnnotationValue(joinPropertyAnnotation.name())) {
+            setName(joinPropertyAnnotation.name());
+        }
+    }
+
+    /**
+     *
+     * @param joinPropertyAnnotation
+     * @param propertyData
+     * @param propertyHolder
+     * @param metadataContext
+     * @return
+     */
+    public static NodeJoinProperty createNodeJoinPropertyFromAnnotation(JoinProperty joinPropertyAnnotation,
                                                                 PropertyData propertyData,
                                                                 PropertyHolder propertyHolder,
                                                                 MetadataContext metadataContext) {
-        return null;
+        if(joinPropertyAnnotation != null) {
+            return createNodeJoinProperty(joinPropertyAnnotation,
+                    propertyData,
+                    propertyHolder,
+                    metadataContext);
+        }
+        return createNodeJoinProperty(null, propertyData, propertyHolder, metadataContext);
+    }
+
+    /**
+     *
+     * @param joinPropertyAnnotation
+     * @param propertyData
+     * @param propertyHolder
+     * @param metadataContext
+     * @return
+     */
+    private static NodeJoinProperty createNodeJoinProperty(JoinProperty joinPropertyAnnotation,
+                                                           PropertyData propertyData,
+                                                           PropertyHolder propertyHolder,
+                                                           MetadataContext metadataContext) {
+        NodeJoinProperty nodeJoinProperty = new NodeJoinProperty(metadataContext);
+        nodeJoinProperty.setPropertyHolder(propertyHolder);
+        nodeJoinProperty.setPropertyName(BinderHelper.getRelativePath(propertyData.getPropertyName(), propertyHolder));
+        if(joinPropertyAnnotation != null) {
+            nodeJoinProperty.setJoinPropertyAnnotation(joinPropertyAnnotation);
+        }
+        return nodeJoinProperty;
     }
 
 }

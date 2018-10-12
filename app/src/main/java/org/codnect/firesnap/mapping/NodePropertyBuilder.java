@@ -1,6 +1,7 @@
 package org.codnect.firesnap.mapping;
 
 import org.codnect.firesnap.annotation.JoinProperty;
+import org.codnect.firesnap.annotation.OneToOne;
 import org.codnect.firesnap.annotation.Property;
 import org.codnect.firesnap.binder.ModelBinder;
 import org.codnect.firesnap.core.MetadataContext;
@@ -18,6 +19,8 @@ public class NodePropertyBuilder {
     private PropertyData propertyData;
     private PropertyHolder propertyHolder;
     private ModelBinder modelBinder;
+    private NodeProperty nodeProperty;
+    private NodeJoinProperty nodeJoinProperty;
     private MetadataContext metadataContext;
 
     public NodePropertyBuilder(XProperty property,
@@ -38,18 +41,47 @@ public class NodePropertyBuilder {
     public void build() {
         if(property.isAnnotationPresent(Property.class)) {
             Property propertyAnnotation = property.getAnnotation(Property.class);
-            NodeProperty nodeProperty = NodeProperty.createNodePropertyFromAnnotation(
+            nodeProperty = NodeProperty.createNodePropertyFromAnnotation(
                     propertyAnnotation,
                     propertyData,
                     propertyHolder,
                     metadataContext
             );
         }
+
         if(property.isAnnotationPresent(JoinProperty.class)) {
             JoinProperty joinPropertyAnnotation = property.getAnnotation(JoinProperty.class);
-            NodeJoinProperty nodeJoinProperty = null;
+            if (joinPropertyAnnotation != null) {
+                nodeJoinProperty = NodeJoinProperty.createNodeJoinPropertyFromAnnotation(joinPropertyAnnotation,
+                        propertyData,
+                        propertyHolder,
+                        metadataContext);
+            }
         }
-        /* code */
+
+        /* if the property has not a join property, create a default join property */
+        if(nodeJoinProperty == null && property.isAnnotationPresent(OneToOne.class)) {
+            nodeJoinProperty = NodeJoinProperty.createNodeJoinPropertyFromAnnotation(null,
+                    propertyData,
+                    propertyHolder,
+                    metadataContext);
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public NodeProperty getNodeProperty() {
+        return nodeProperty;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public NodeJoinProperty getNodeJoinProperty() {
+        return nodeJoinProperty;
     }
 
 }

@@ -2,8 +2,10 @@ package org.codnect.firesnap.binder;
 
 import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.core.AnnotatedClassType;
+import org.codnect.firesnap.core.PropertyHolder;
 import org.codnect.firesnap.exception.AnnotationException;
 import org.codnect.firesnap.reflection.XClass;
+import org.codnect.firesnap.util.StringHelper;
 
 /**
  * Created by Burak Koken on 20.5.2018.
@@ -47,6 +49,25 @@ public class BinderHelper {
                     xClass.getName());
         }
         return true;
+    }
+
+    /**
+     *
+     * @param propertyName
+     * @param propertyHolder
+     * @return
+     */
+    public static String getRelativePath(String propertyName, PropertyHolder propertyHolder) {
+        if(propertyHolder == null) {
+            return propertyName;
+        }
+        String path = propertyHolder.getPath();
+        String modelName = propertyHolder.getPersistentClass().getModelName();
+        if(path.equals(modelName)) {
+            return propertyName;
+        } else {
+            return StringHelper.qualify(path.substring(modelName.length() + 1), propertyName);
+        }
     }
 
 }

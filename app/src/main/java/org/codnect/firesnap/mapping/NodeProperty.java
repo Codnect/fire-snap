@@ -15,6 +15,7 @@ public class NodeProperty {
     private String name;
     private String propertyName;
     private boolean nullable;
+    private PropertyHolder propertyHolder;
     private MetadataContext metadataContext;
 
     protected NodeProperty(MetadataContext metadataContext) {
@@ -44,6 +45,14 @@ public class NodeProperty {
 
     public void setPropertyName(String propertyName) {
         this.propertyName = propertyName;
+    }
+
+    public PropertyHolder getPropertyHolder() {
+        return propertyHolder;
+    }
+
+    public void setPropertyHolder(PropertyHolder propertyHolder) {
+        this.propertyHolder = propertyHolder;
     }
 
     public void setMetadataContext(MetadataContext metadataContext) {
