@@ -21,6 +21,7 @@ import org.codnect.firesnap.exception.PersistenceException;
 import org.codnect.firesnap.mapping.DiscriminatorNodeProperty;
 import org.codnect.firesnap.inheritance.JoinedSubclass;
 import org.codnect.firesnap.inheritance.PersistentClass;
+import org.codnect.firesnap.mapping.NodePropertyBuilder;
 import org.codnect.firesnap.mapping.PropertyData;
 import org.codnect.firesnap.mapping.PropertyDataCollector;
 import org.codnect.firesnap.core.PropertyHolder;
@@ -273,6 +274,13 @@ public class AnnotationBinder {
             if(property.isAnnotationPresent(Id.class)) {
                 propertyBinder.setIdProperty(true);
             }
+            NodePropertyBuilder nodePropertyBuilder = new NodePropertyBuilder(
+                    property,
+                    propertyData,
+                    propertyHolder,
+                    modelBinder,
+                    metadataContext);
+            nodePropertyBuilder.build();
             if(property.isAnnotationPresent(OneToOne.class)) {
                 if(property.isAnnotationPresent(Property.class)) {
                     throw new AnnotationException("Property annotation not allowed for @OneToOne property");
