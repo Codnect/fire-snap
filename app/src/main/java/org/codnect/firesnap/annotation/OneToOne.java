@@ -16,4 +16,6 @@ import java.lang.annotation.Target;
 @Documented
 public @interface OneToOne {
 
+    String mappedBy() default "";
+
 }

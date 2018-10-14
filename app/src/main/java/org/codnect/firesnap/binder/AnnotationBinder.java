@@ -21,6 +21,7 @@ import org.codnect.firesnap.exception.PersistenceException;
 import org.codnect.firesnap.mapping.DiscriminatorNodeProperty;
 import org.codnect.firesnap.inheritance.JoinedSubclass;
 import org.codnect.firesnap.inheritance.PersistentClass;
+import org.codnect.firesnap.mapping.NodeJoinProperty;
 import org.codnect.firesnap.mapping.NodePropertyBuilder;
 import org.codnect.firesnap.mapping.PropertyData;
 import org.codnect.firesnap.mapping.PropertyDataCollector;
@@ -274,6 +275,7 @@ public class AnnotationBinder {
             if(property.isAnnotationPresent(Id.class)) {
                 propertyBinder.setIdProperty(true);
             }
+
             NodePropertyBuilder nodePropertyBuilder = new NodePropertyBuilder(
                     property,
                     propertyData,
@@ -281,12 +283,62 @@ public class AnnotationBinder {
                     modelBinder,
                     metadataContext);
             nodePropertyBuilder.build();
+            NodeJoinProperty nodeJoinProperty = nodePropertyBuilder.getNodeJoinProperty();
+
             if(property.isAnnotationPresent(OneToOne.class)) {
                 if(property.isAnnotationPresent(Property.class)) {
                     throw new AnnotationException("Property annotation not allowed for @OneToOne property");
                 }
+                OneToOne oneToOneAnnotation = property.getAnnotation(OneToOne.class);
+                bindOneToOne(
+                        propertyBinder,
+                        propertyData,
+                        propertyHolder,
+                        nodeJoinProperty,
+                        oneToOneAnnotation,
+                        metadataContext);
             }
         }
+    }
+
+    /**
+     *
+     * @param propertyBinder
+     * @param propertyData
+     * @param propertyHolder
+     * @param nodeJoinProperty
+     * @param oneToOneAnnotation
+     * @param metadataContext
+     */
+    private static void bindOneToOne(PropertyBinder propertyBinder,
+                                     PropertyData propertyData,
+                                     PropertyHolder propertyHolder,
+                                     NodeJoinProperty nodeJoinProperty,
+                                     OneToOne oneToOneAnnotation,
+                                     MetadataContext metadataContext) {
+        if(!BinderHelper.isEmptyAnnotationValue(oneToOneAnnotation.mappedBy())) {
+
+        } else {
+           bindManyToOne(propertyBinder, propertyData, propertyHolder, nodeJoinProperty, true, metadataContext);
+        }
+    }
+
+    /**
+     *
+     * @param propertyBinder
+     * @param propertyData
+     * @param propertyHolder
+     * @param nodeJoinProperty
+     * @param isLogicalOneToOne
+     * @param metadataContext
+     */
+    private static void bindManyToOne(PropertyBinder propertyBinder,
+                                      PropertyData propertyData,
+                                      PropertyHolder propertyHolder,
+                                      NodeJoinProperty nodeJoinProperty,
+                                      boolean isLogicalOneToOne,
+                                      MetadataContext metadataContext) {
+
     }
 
 }
