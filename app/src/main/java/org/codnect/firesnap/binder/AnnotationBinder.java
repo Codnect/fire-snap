@@ -6,6 +6,7 @@ import org.codnect.firesnap.annotation.Discriminator;
 import org.codnect.firesnap.annotation.DiscriminatorValue;
 import org.codnect.firesnap.annotation.Id;
 import org.codnect.firesnap.annotation.InheritanceStrategy;
+import org.codnect.firesnap.annotation.ManyToOne;
 import org.codnect.firesnap.annotation.MappedSuperClass;
 import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.annotation.Node;
@@ -297,6 +298,10 @@ public class AnnotationBinder {
                         nodeJoinProperty,
                         oneToOneAnnotation,
                         metadataContext);
+            } else if(property.isAnnotationPresent(ManyToOne.class)) {
+                if(property.isAnnotationPresent(Property.class)) {
+                    throw new AnnotationException("Property annotation not allowed for @ManyToOne property");
+                }
             }
         }
     }
@@ -338,7 +343,11 @@ public class AnnotationBinder {
                                       NodeJoinProperty nodeJoinProperty,
                                       boolean isLogicalOneToOne,
                                       MetadataContext metadataContext) {
-
+        org.codnect.firesnap.mapping.ManyToOne manyToOne = new org.codnect.firesnap.mapping.ManyToOne(metadataContext);
+        manyToOne.setLogicalOneToOne(isLogicalOneToOne);
+        XProperty property = propertyData.getProperty();
+        String propertyName = propertyData.getPropertyName();
+        String propertyPath = propertyHolder.getPath() + propertyName;
     }
 
 }
