@@ -147,12 +147,12 @@ public class InheritanceState {
             if((xClass.isAnnotationPresent(Model.class) || xClass.isAnnotationPresent(MappedSuperClass.class))
                     && (xClass.getSuperclass() == null || reflectionManager.equals(xClass.getSuperclass(), Object.class))){
                 for(XProperty xProperty : xClass.getDeclaredMethodProperties()) {
-                    if(xProperty.isAnnotationPresent(Id.class) /* || xProperty.isAnnotationPresent(EmbeddedId.class) */) {
+                    if(xProperty.isAnnotationPresent(Id.class)) {
                         return AccessType.METHOD;
                     }
                 }
                 for(XProperty xProperty : xClass.getDeclaredFieldProperties()) {
-                    if(xProperty.isAnnotationPresent(Id.class) /* || xProperty.isAnnotationPresent(EmbeddedId.class) */) {
+                    if(xProperty.isAnnotationPresent(Id.class)) {
                         return AccessType.FIELD;
                     }
                 }

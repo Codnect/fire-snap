@@ -7,7 +7,7 @@ import org.codnect.firesnap.core.MetadataContext;
  *
  * @author Burak Koken
  */
-public class OneToOne extends ToOne{
+public class OneToOne extends ToOne {
 
     private String propertyName;
     private String modelName;
