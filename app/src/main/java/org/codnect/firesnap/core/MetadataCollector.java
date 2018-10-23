@@ -7,10 +7,13 @@ import org.codnect.firesnap.exception.DuplicateMappingException;
 import org.codnect.firesnap.mapping.DenormalizedNode;
 import org.codnect.firesnap.mapping.Node;
 import org.codnect.firesnap.inheritance.PersistentClass;
+import org.codnect.firesnap.mapping.SecondStep;
 import org.codnect.firesnap.reflection.XClass;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,12 +29,15 @@ public class MetadataCollector {
     private Map<String, ModelNodeReference> modelNodeReferenceMap;
     private Map<String, Node> nodeMap;
 
+    private List<SecondStep> secondStepGeneralList;
+
     public MetadataCollector() {
         modelAliasNames = new HashMap<>();
         modelBindingMap = new HashMap<>();
         annotatedClassTypeMap = new HashMap<>();
         modelNodeReferenceMap = new HashMap<>();
         nodeMap = new HashMap<>();
+        secondStepGeneralList = new ArrayList<>();
     }
 
     /**
@@ -171,6 +177,14 @@ public class MetadataCollector {
      */
     public Collection<Node> getAllNodes() {
         return nodeMap.values();
+    }
+
+    /**
+     *
+     * @param secondStep
+     */
+    public void addSecondStep(SecondStep secondStep) {
+        secondStepGeneralList.add(secondStep);
     }
 
 }

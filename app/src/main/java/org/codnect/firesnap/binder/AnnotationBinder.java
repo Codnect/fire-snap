@@ -24,6 +24,7 @@ import org.codnect.firesnap.inheritance.JoinedSubclass;
 import org.codnect.firesnap.inheritance.PersistentClass;
 import org.codnect.firesnap.mapping.NodeJoinProperty;
 import org.codnect.firesnap.mapping.NodePropertyBuilder;
+import org.codnect.firesnap.mapping.OneToOneSecondStep;
 import org.codnect.firesnap.mapping.PropertyData;
 import org.codnect.firesnap.mapping.PropertyDataCollector;
 import org.codnect.firesnap.core.PropertyHolder;
@@ -322,7 +323,14 @@ public class AnnotationBinder {
                                      OneToOne oneToOneAnnotation,
                                      MetadataContext metadataContext) {
         if(!BinderHelper.isEmptyAnnotationValue(oneToOneAnnotation.mappedBy())) {
-
+            OneToOneSecondStep oneToOneSecondStep = new OneToOneSecondStep(
+                    propertyData,
+                    propertyHolder,
+                    oneToOneAnnotation.mappedBy(),
+                    nodeJoinProperty,
+                    metadataContext
+            );
+            metadataContext.getMetadataCollector().addSecondStep(oneToOneSecondStep);
         } else {
            bindManyToOne(propertyBinder, propertyData, propertyHolder, nodeJoinProperty, true, metadataContext);
         }
