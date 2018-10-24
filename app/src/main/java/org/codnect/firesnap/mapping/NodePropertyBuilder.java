@@ -2,6 +2,7 @@ package org.codnect.firesnap.mapping;
 
 import org.codnect.firesnap.annotation.JoinProperty;
 import org.codnect.firesnap.annotation.OneToOne;
+import org.codnect.firesnap.annotation.ManyToOne;
 import org.codnect.firesnap.annotation.Property;
 import org.codnect.firesnap.binder.ModelBinder;
 import org.codnect.firesnap.core.MetadataContext;
@@ -60,7 +61,8 @@ public class NodePropertyBuilder {
         }
 
         /* if the property has not a join property, create a default join property */
-        if(nodeJoinProperty == null && property.isAnnotationPresent(OneToOne.class)) {
+        if(nodeJoinProperty == null &&
+                (property.isAnnotationPresent(OneToOne.class) || property.isAnnotationPresent(ManyToOne.class))) {
             nodeJoinProperty = NodeJoinProperty.createNodeJoinPropertyFromAnnotation(null,
                     propertyData,
                     propertyHolder,

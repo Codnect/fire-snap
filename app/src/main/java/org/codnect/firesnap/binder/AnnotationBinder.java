@@ -351,7 +351,10 @@ public class AnnotationBinder {
                                       NodeJoinProperty nodeJoinProperty,
                                       boolean isLogicalOneToOne,
                                       MetadataContext metadataContext) {
-        org.codnect.firesnap.mapping.ManyToOne manyToOne = new org.codnect.firesnap.mapping.ManyToOne(metadataContext);
+        org.codnect.firesnap.mapping.ManyToOne manyToOne = new org.codnect.firesnap.mapping.ManyToOne(
+                nodeJoinProperty.getNode(),
+                metadataContext
+        );
         manyToOne.setLogicalOneToOne(isLogicalOneToOne);
         XProperty property = propertyData.getProperty();
         String propertyName = propertyData.getPropertyName();

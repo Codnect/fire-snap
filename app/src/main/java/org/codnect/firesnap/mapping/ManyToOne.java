@@ -11,14 +11,22 @@ public class ManyToOne extends ToOne {
 
     private boolean isLogicalOneToOne;
 
-    public ManyToOne(MetadataContext metadataContext) {
-        super(metadataContext);
+    public ManyToOne(Node node, MetadataContext metadataContext) {
+        super(node, metadataContext);
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isLogicalOneToOne() {
         return isLogicalOneToOne;
     }
 
+    /**
+     *
+     * @param logicalOneToOne
+     */
     public void setLogicalOneToOne(boolean logicalOneToOne) {
         isLogicalOneToOne = logicalOneToOne;
     }

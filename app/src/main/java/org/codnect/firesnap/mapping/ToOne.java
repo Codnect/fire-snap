@@ -7,28 +7,43 @@ import org.codnect.firesnap.core.MetadataContext;
  *
  * @author Burak Koken
  */
-public abstract class ToOne {
+public abstract class ToOne extends SimpleValue {
 
     private String referencedModelName;
     private String referencedPropertyName;
-    private MetadataContext metadataContext;
 
-    protected ToOne(MetadataContext metadataContext) {
-        this.metadataContext = metadataContext;
+    protected ToOne(Node node, MetadataContext metadataContext) {
+        super(node, metadataContext);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getReferencedModelName() {
         return referencedModelName;
     }
 
+    /**
+     *
+     * @param referencedModelName
+     */
     public void setReferencedModelName(String referencedModelName) {
         this.referencedModelName = referencedModelName;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getReferencedPropertyName() {
         return referencedPropertyName;
     }
 
+    /**
+     *
+     * @param referencedPropertyName
+     */
     public void setReferencedPropertyName(String referencedPropertyName) {
         this.referencedPropertyName = referencedPropertyName;
     }
