@@ -4,6 +4,8 @@ import org.codnect.firesnap.annotation.AccessType;
 import org.codnect.firesnap.core.InheritanceState;
 import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.core.PropertyHolder;
+import org.codnect.firesnap.mapping.NodeProperty;
+import org.codnect.firesnap.mapping.SimpleValue;
 import org.codnect.firesnap.reflection.XClass;
 
 import java.util.Map;
@@ -22,6 +24,8 @@ public class PropertyBinder {
     private PropertyHolder propertyHolder;
     private Map<XClass, InheritanceState> inheritanceStateMap;
     private boolean isIdProperty;
+    private SimpleValue value;
+    private SimpleValueBinder simpleValueBinder;
     private MetadataContext metadataContext;
 
     public PropertyBinder(MetadataContext metadataContext) {
@@ -58,6 +62,19 @@ public class PropertyBinder {
 
     public void setIdProperty(boolean idProperty) {
         isIdProperty = idProperty;
+    }
+
+    public SimpleValue getValue() {
+        return value;
+    }
+
+    public NodeProperty bind() {
+        simpleValueBinder = new SimpleValueBinder(metadataContext);
+        simpleValueBinder.setPropertyName(propertyName);
+        simpleValueBinder.setAccessType(accessType);
+        simpleValueBinder.setPersistentClassName(propertyHolder.getClassName());
+        value = simpleValueBinder.bind();
+        return null;
     }
 
 }

@@ -5,6 +5,7 @@ import org.codnect.firesnap.annotation.MappedSuperClass;
 import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.exception.DuplicateMappingException;
 import org.codnect.firesnap.mapping.DenormalizedNode;
+import org.codnect.firesnap.mapping.IdGeneratorSecondStep;
 import org.codnect.firesnap.mapping.Node;
 import org.codnect.firesnap.inheritance.PersistentClass;
 import org.codnect.firesnap.mapping.SecondStep;
@@ -29,7 +30,8 @@ public class MetadataCollector {
     private Map<String, ModelNodeReference> modelNodeReferenceMap;
     private Map<String, Node> nodeMap;
 
-    private List<SecondStep> secondStepGeneralList;
+    private List<SecondStep> idGeneratorSecondStepList;
+    private List<SecondStep> generalSecondStepList;
 
     public MetadataCollector() {
         modelAliasNames = new HashMap<>();
@@ -37,7 +39,8 @@ public class MetadataCollector {
         annotatedClassTypeMap = new HashMap<>();
         modelNodeReferenceMap = new HashMap<>();
         nodeMap = new HashMap<>();
-        secondStepGeneralList = new ArrayList<>();
+        idGeneratorSecondStepList = new ArrayList<>();
+        generalSecondStepList = new ArrayList<>();
     }
 
     /**
@@ -184,7 +187,11 @@ public class MetadataCollector {
      * @param secondStep
      */
     public void addSecondStep(SecondStep secondStep) {
-        secondStepGeneralList.add(secondStep);
+        if(secondStep instanceof IdGeneratorSecondStep) {
+            idGeneratorSecondStepList.add(secondStep);
+        } else {
+            generalSecondStepList.add(secondStep);
+        }
     }
 
 }

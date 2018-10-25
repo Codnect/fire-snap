@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.codnect.firesnap.annotation.Discriminator;
 import org.codnect.firesnap.annotation.DiscriminatorValue;
+import org.codnect.firesnap.annotation.GeneratedValue;
 import org.codnect.firesnap.annotation.Id;
 import org.codnect.firesnap.annotation.InheritanceStrategy;
 import org.codnect.firesnap.annotation.ManyToOne;
@@ -13,6 +14,9 @@ import org.codnect.firesnap.annotation.Node;
 import org.codnect.firesnap.annotation.OneToOne;
 import org.codnect.firesnap.annotation.Property;
 import org.codnect.firesnap.core.AnnotatedClassType;
+import org.codnect.firesnap.mapping.IdGeneratorInterpreter;
+import org.codnect.firesnap.mapping.IdGeneratorSecondStep;
+import org.codnect.firesnap.mapping.IdGeneratorType;
 import org.codnect.firesnap.core.InheritanceState;
 import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.core.ModelNodeReference;
@@ -32,6 +36,7 @@ import org.codnect.firesnap.core.PropertyHolderFactory;
 import org.codnect.firesnap.inheritance.RootClass;
 import org.codnect.firesnap.inheritance.SingleNodeSubclass;
 import org.codnect.firesnap.inheritance.UnionSubclass;
+import org.codnect.firesnap.mapping.SimpleValue;
 import org.codnect.firesnap.reflection.XClass;
 import org.codnect.firesnap.reflection.XProperty;
 
@@ -274,7 +279,8 @@ public class AnnotationBinder {
             propertyBinder.setModelBinder(modelBinder);
             propertyBinder.setPropertyHolder(propertyHolder);
             XProperty property = propertyData.getProperty();
-            if(property.isAnnotationPresent(Id.class)) {
+            boolean isIdProperty = property.isAnnotationPresent(Id.class);
+            if(isIdProperty) {
                 propertyBinder.setIdProperty(true);
             }
 
@@ -302,6 +308,12 @@ public class AnnotationBinder {
             } else if(property.isAnnotationPresent(ManyToOne.class)) {
                 if(property.isAnnotationPresent(Property.class)) {
                     throw new AnnotationException("Property annotation not allowed for @ManyToOne property");
+                }
+            } else {
+                propertyBinder.bind();
+                if(isIdProperty) {
+                    SimpleValue idPropertyValue = propertyBinder.getValue();
+                    processId(idPropertyValue, propertyData, metadataContext);
                 }
             }
         }
@@ -359,6 +371,33 @@ public class AnnotationBinder {
         XProperty property = propertyData.getProperty();
         String propertyName = propertyData.getPropertyName();
         String propertyPath = propertyHolder.getPath() + propertyName;
+    }
+
+    /**
+     *
+     * @param idPropertyValue
+     * @param propertyData
+     * @param metadataContext
+     */
+    private static void processId(SimpleValue idPropertyValue,
+                                  PropertyData propertyData,
+                                  MetadataContext metadataContext) {
+        XClass modelClass = propertyData.getClassOrElement();
+        XProperty property = propertyData.getProperty();
+        GeneratedValue generatedValueAnnotation = property.getAnnotation(GeneratedValue.class);
+        IdGeneratorInterpreter idGeneratorInterpreter = new IdGeneratorInterpreter(
+                modelClass,
+                generatedValueAnnotation,
+                metadataContext
+        );
+        IdGeneratorType idGeneratorType = idGeneratorInterpreter.determine();
+        IdGeneratorSecondStep idGeneratorSecondStep = new IdGeneratorSecondStep(
+                idPropertyValue,
+                property,
+                idGeneratorType,
+                metadataContext
+        );
+        metadataContext.getMetadataCollector().addSecondStep(idGeneratorSecondStep);
     }
 
 }
