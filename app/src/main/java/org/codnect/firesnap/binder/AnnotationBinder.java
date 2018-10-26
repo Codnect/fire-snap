@@ -85,12 +85,19 @@ public class AnnotationBinder {
             modelBinder.setInheritanceState(inheritanceState);
             /* bind the model */
             modelBinder.bindModel();
-            /* process discriminator property */
+            /* process the discriminator property */
             DiscriminatorNodeProperty discriminatorNodeProperty = processDiscriminatorProperty(
                     xClass,
                     inheritanceState,
                     modelBinder,
                     metadataContext);
+            /* determine the join property for joined subclass */
+            NodeJoinProperty nodeJoinPropertyForJoinedSubclass = buildJoinPropertyForJoinedSubclass(
+                    xClass,
+                    inheritanceState,
+                    superModelPersistentClass,
+                    metadataContext
+            );
             /* bind the node */
             if(inheritanceState.hasNode()) {
                 String nodeName = "";
@@ -124,6 +131,30 @@ public class AnnotationBinder {
                     inheritanceStateMap,
                     metadataContext
             );
+            /* bind the discriminator property */
+            if(inheritanceState.getStrategy() == InheritanceStrategy.JOINED) {
+                if(!inheritanceState.hasParents() && discriminatorNodeProperty != null && inheritanceState.hasSiblings()) {
+                    bindDiscriminatorNodePropertyToRootClass(
+                            (RootClass) persistentClass,
+                            discriminatorNodeProperty,
+                            propertyHolder,
+                            metadataContext
+                    );
+                    modelBinder.bindDiscriminatorValue();
+                } else {
+                    /* TODO */
+                }
+            } else if(inheritanceState.getStrategy() == InheritanceStrategy.SINGLE_NODE) {
+                if(!inheritanceState.hasParents() && discriminatorNodeProperty != null && inheritanceState.hasSiblings()) {
+                    bindDiscriminatorNodePropertyToRootClass(
+                            (RootClass) persistentClass,
+                            discriminatorNodeProperty,
+                            propertyHolder,
+                            metadataContext
+                    );
+                    modelBinder.bindDiscriminatorValue();
+                }
+            }
             /* process the property annotations */
             processPropertyAnnotations(propertyDataCollector, propertyHolder, persistentClass, modelBinder, inheritanceStateMap, metadataContext);
             /* add to metadata collector */
@@ -398,6 +429,46 @@ public class AnnotationBinder {
                 metadataContext
         );
         metadataContext.getMetadataCollector().addSecondStep(idGeneratorSecondStep);
+    }
+
+    /**
+     *
+     * @param xClass
+     * @param inheritanceState
+     * @param superModelPersistentClass
+     * @param metadataContext
+     * @return
+     */
+    private static NodeJoinProperty buildJoinPropertyForJoinedSubclass(XClass xClass,
+                                                                       InheritanceState inheritanceState,
+                                                                       PersistentClass superModelPersistentClass,
+                                                                       MetadataContext metadataContext) {
+        NodeJoinProperty nodeJoinProperty = null;
+        if(inheritanceState.hasParents() && inheritanceState.getStrategy() == InheritanceStrategy.JOINED) {
+            /* TODO */
+        }
+        return nodeJoinProperty;
+    }
+
+    /**
+     *
+     * @param rootClass
+     * @param discriminatorNodeProperty
+     * @param propertyHolder
+     * @param metadataContext
+     */
+    private static void bindDiscriminatorNodePropertyToRootClass(RootClass rootClass,
+                                                                 DiscriminatorNodeProperty discriminatorNodeProperty,
+                                                                 PropertyHolder propertyHolder,
+                                                                 MetadataContext metadataContext) {
+        if(rootClass.getDiscriminator() == null && discriminatorNodeProperty != null) {
+            SimpleValue discriminator = new SimpleValue(rootClass.getNode(), metadataContext);
+            discriminator.setTypeName(discriminatorNodeProperty.getDiscriminatorTypeName());
+            discriminatorNodeProperty.setPropertyHolder(propertyHolder);
+            discriminatorNodeProperty.setValue(discriminator);
+            rootClass.setDiscriminator(discriminator);
+            /* TODO */
+        }
     }
 
 }

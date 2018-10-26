@@ -4,10 +4,12 @@ import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.core.InheritanceState;
 import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.core.ModelNodeReference;
+import org.codnect.firesnap.exception.AnnotationException;
 import org.codnect.firesnap.exception.MappingException;
 import org.codnect.firesnap.mapping.Node;
 import org.codnect.firesnap.inheritance.PersistentClass;
 import org.codnect.firesnap.inheritance.SingleNodeSubclass;
+import org.codnect.firesnap.mapping.SimpleValue;
 import org.codnect.firesnap.reflection.XClass;
 import org.codnect.firesnap.util.StringHelper;
 
@@ -135,6 +137,26 @@ public class ModelBinder {
                 superModelNodeReference.getNode(),
                 superModelNodeReference
         );
+    }
+
+    /**
+     *
+     */
+    public void bindDiscriminatorValue() {
+        if(!StringHelper.isEmpty(discriminatorValue)) {
+            persistentClass.setDiscriminatorValue(discriminatorValue);
+        } else {
+            SimpleValue discriminator = persistentClass.getDiscriminator();
+            if(discriminator == null) {
+                persistentClass.setDiscriminatorValue(name);
+            } else if(discriminator.getTypeName().equals("string")) {
+                persistentClass.setDiscriminatorValue(name);
+            } else if(discriminator.getTypeName().equals("integer")) {
+                persistentClass.setDiscriminatorValue(String.valueOf(name.hashCode()));
+            } else {
+                throw new AnnotationException("Unknown discriminator type : " + discriminator.getTypeName());
+            }
+        }
     }
 
 }

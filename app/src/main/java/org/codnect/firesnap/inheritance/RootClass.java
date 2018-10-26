@@ -2,6 +2,7 @@ package org.codnect.firesnap.inheritance;
 
 import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.mapping.Node;
+import org.codnect.firesnap.mapping.SimpleValue;
 
 /**
  * Created by Burak Koken on 20.5.2018.
@@ -11,7 +12,8 @@ import org.codnect.firesnap.mapping.Node;
 public class RootClass extends PersistentClass {
 
     private Node node;
-    private Class persisterClass;
+    private Class persistentClass;
+    private SimpleValue discriminator;
 
     public RootClass(MetadataContext metadataContext) {
         super(metadataContext);
@@ -48,13 +50,21 @@ public class RootClass extends PersistentClass {
     }
 
     @Override
-    public Class getPersisterClass() {
-        return persisterClass;
+    public Class getPersistentClass() {
+        return persistentClass;
     }
 
     @Override
-    public void setPersisterClass(Class persisterClass) {
-        this.persisterClass = persisterClass;
+    public void setPersistentClass(Class persistentClass) {
+        this.persistentClass = persistentClass;
+    }
+
+    public SimpleValue getDiscriminator() {
+        return discriminator;
+    }
+
+    public void setDiscriminator(SimpleValue discriminator) {
+        this.discriminator = discriminator;
     }
 
 }

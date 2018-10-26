@@ -17,6 +17,7 @@ public class NodeProperty {
     private boolean nullable;
     private PropertyHolder propertyHolder;
     private Node node;
+    private SimpleValue value;
     private MetadataContext metadataContext;
 
     protected NodeProperty(MetadataContext metadataContext) {
@@ -83,6 +84,11 @@ public class NodeProperty {
         nodeProperty.setName(name);
         nodeProperty.setPropertyName(propertyData.getPropertyName());
         return nodeProperty;
+    }
+
+    public void setValue(SimpleValue value) {
+        this.value = value;
+        /* TODO */
     }
 
 }

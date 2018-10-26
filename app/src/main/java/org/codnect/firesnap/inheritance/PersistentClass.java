@@ -3,6 +3,7 @@ package org.codnect.firesnap.inheritance;
 import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.exception.MappingException;
 import org.codnect.firesnap.mapping.Node;
+import org.codnect.firesnap.mapping.SimpleValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -179,11 +180,16 @@ public abstract class PersistentClass {
      *
      * @return
      */
-    public abstract Class getPersisterClass();
+    public abstract Class getPersistentClass();
 
     /**
      *
      */
-    public abstract void setPersisterClass(Class persisterClass);
+    public abstract void setPersistentClass(Class persistentClass);
+
+    /**
+     *
+     */
+    public abstract SimpleValue getDiscriminator();
 
 }

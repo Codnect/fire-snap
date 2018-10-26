@@ -9,8 +9,9 @@ import org.codnect.firesnap.core.MetadataContext;
  */
 public class SimpleValue {
 
-    private MetadataContext metadataContext;
     private Node node;
+    private String typeName;
+    private MetadataContext metadataContext;
 
     public SimpleValue(MetadataContext metadataContext) {
         this.metadataContext = metadataContext;
@@ -25,16 +26,32 @@ public class SimpleValue {
      *
      * @return
      */
-    public MetadataContext getMetadataContext() {
-        return metadataContext;
+    public Node getNode() {
+        return node;
     }
 
     /**
      *
      * @return
      */
-    public Node getNode() {
-        return node;
+    public MetadataContext getMetadataContext() {
+        return metadataContext;
+    }
+
+    /**
+     *
+     * @param typeName
+     */
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getTypeName() {
+        return typeName;
     }
 
 }

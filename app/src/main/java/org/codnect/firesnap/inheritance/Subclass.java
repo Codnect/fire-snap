@@ -11,7 +11,7 @@ import org.codnect.firesnap.mapping.Node;
 public abstract class Subclass extends PersistentClass {
 
     private PersistentClass superModel;
-    private Class persisterClass;
+    private Class persistentClass;
 
     public Subclass(MetadataContext metadataContext, PersistentClass superModel) {
         super(metadataContext);
@@ -19,16 +19,16 @@ public abstract class Subclass extends PersistentClass {
     }
 
     @Override
-    public Class getPersisterClass() {
-        if(persisterClass != null) {
-            return persisterClass;
+    public Class getPersistentClass() {
+        if(persistentClass != null) {
+            return persistentClass;
         }
-        return getSuperModelClass().getPersisterClass();
+        return getSuperModelClass().getPersistentClass();
     }
 
     @Override
-    public void setPersisterClass(Class persisterClass) {
-        this.persisterClass = persisterClass;
+    public void setPersistentClass(Class persistentClass) {
+        this.persistentClass = persistentClass;
     }
 
     @Override

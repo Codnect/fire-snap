@@ -7,8 +7,6 @@ package org.codnect.firesnap.annotation;
  */
 public enum DiscriminatorType {
 
-    CHAR,
-
     INTEGER,
 
     STRING

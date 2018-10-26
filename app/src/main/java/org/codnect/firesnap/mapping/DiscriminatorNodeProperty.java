@@ -56,4 +56,15 @@ public class DiscriminatorNodeProperty extends NodeProperty {
         this.discriminatorType = discriminatorType;
     }
 
+    /**
+     *
+     * @return
+     */
+    public String getDiscriminatorTypeName() {
+        if(discriminatorType == DiscriminatorType.STRING) {
+            return "string";
+        }
+        return "integer";
+    }
+
 }
