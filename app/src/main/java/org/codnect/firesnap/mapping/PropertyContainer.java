@@ -4,8 +4,8 @@ import org.codnect.firesnap.annotation.Access;
 import org.codnect.firesnap.annotation.AccessType;
 import org.codnect.firesnap.annotation.Transient;
 import org.codnect.firesnap.exception.MappingException;
-import org.codnect.firesnap.reflection.XClass;
-import org.codnect.firesnap.reflection.XProperty;
+import org.codnect.xreflect.XClass;
+import org.codnect.xreflect.XProperty;
 
 import java.util.Collection;
 import java.util.HashMap;

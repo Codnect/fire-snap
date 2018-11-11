@@ -1,8 +1,8 @@
 package org.codnect.firesnap.mapping;
 
 import org.codnect.firesnap.annotation.AccessType;
-import org.codnect.firesnap.reflection.XClass;
-import org.codnect.firesnap.reflection.XProperty;
+import org.codnect.xreflect.XClass;
+import org.codnect.xreflect.XProperty;
 
 /**
  * Created by Burak Koken on 23.9.2018.

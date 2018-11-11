@@ -2,7 +2,7 @@ package org.codnect.firesnap.core;
 
 import org.codnect.firesnap.binder.ModelBinder;
 import org.codnect.firesnap.inheritance.PersistentClass;
-import org.codnect.firesnap.reflection.XClass;
+import org.codnect.xreflect.XClass;
 
 import java.util.Map;
 

@@ -13,9 +13,9 @@ import org.codnect.firesnap.mapping.SimplePropertyData;
 import org.codnect.firesnap.mapping.PropertyContainer;
 import org.codnect.firesnap.mapping.PropertyData;
 import org.codnect.firesnap.mapping.PropertyDataCollector;
-import org.codnect.firesnap.reflection.ReflectionManager;
-import org.codnect.firesnap.reflection.XClass;
-import org.codnect.firesnap.reflection.XProperty;
+import org.codnect.xreflect.ReflectionManager;
+import org.codnect.xreflect.XClass;
+import org.codnect.xreflect.XProperty;
 
 import java.util.ArrayList;
 import java.util.Collection;

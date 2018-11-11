@@ -4,8 +4,8 @@ import static junit.framework.Assert.*;
 
 import org.codnect.firesnap.annotation.InheritanceStrategy;
 import org.codnect.firesnap.binder.AnnotationBinder;
-import org.codnect.firesnap.reflection.ReflectionManager;
-import org.codnect.firesnap.reflection.XClass;
+import org.codnect.xreflect.ReflectionManager;
+import org.codnect.xreflect.XClass;
 import org.junit.Before;
 import org.junit.Test;
 

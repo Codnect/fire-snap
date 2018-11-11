@@ -1,6 +1,6 @@
 package org.codnect.firesnap.core;
 
-import org.codnect.firesnap.reflection.ReflectionManager;
+import org.codnect.xreflect.ReflectionManager;
 import org.junit.Before;
 import org.junit.Test;
 

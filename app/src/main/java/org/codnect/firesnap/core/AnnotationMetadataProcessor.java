@@ -6,8 +6,8 @@ import org.codnect.firesnap.annotation.Embeddable;
 import org.codnect.firesnap.annotation.MappedSuperClass;
 import org.codnect.firesnap.annotation.Model;
 import org.codnect.firesnap.binder.AnnotationBinder;
-import org.codnect.firesnap.reflection.ReflectionManager;
-import org.codnect.firesnap.reflection.XClass;
+import org.codnect.xreflect.ReflectionManager;
+import org.codnect.xreflect.XClass;
 
 import java.util.ArrayList;
 import java.util.List;

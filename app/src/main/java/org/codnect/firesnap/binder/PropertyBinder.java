@@ -6,7 +6,7 @@ import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.core.PropertyHolder;
 import org.codnect.firesnap.mapping.NodeProperty;
 import org.codnect.firesnap.mapping.SimpleValue;
-import org.codnect.firesnap.reflection.XClass;
+import org.codnect.xreflect.XClass;
 
 import java.util.Map;
 

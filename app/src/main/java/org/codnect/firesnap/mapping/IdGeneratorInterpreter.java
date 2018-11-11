@@ -6,7 +6,7 @@ import org.codnect.firesnap.binder.BinderHelper;
 import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.exception.AnnotationException;
 import org.codnect.firesnap.exception.MappingException;
-import org.codnect.firesnap.reflection.XClass;
+import org.codnect.xreflect.XClass;
 
 /**
  * Created by Burak Koken on 25.10.2018.

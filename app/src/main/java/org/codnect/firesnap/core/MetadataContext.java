@@ -1,6 +1,6 @@
 package org.codnect.firesnap.core;
 
-import org.codnect.firesnap.reflection.ReflectionManager;
+import org.codnect.xreflect.ReflectionManager;
 
 /**
  * Created by Burak Koken on 20.5.2018.
