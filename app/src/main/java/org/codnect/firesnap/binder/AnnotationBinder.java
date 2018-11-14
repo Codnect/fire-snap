@@ -37,8 +37,8 @@ import org.codnect.firesnap.inheritance.RootClass;
 import org.codnect.firesnap.inheritance.SingleNodeSubclass;
 import org.codnect.firesnap.inheritance.UnionSubclass;
 import org.codnect.firesnap.mapping.SimpleValue;
-import org.codnect.firesnap.reflection.XClass;
-import org.codnect.firesnap.reflection.XProperty;
+import org.codnect.xreflect.XClass;
+import org.codnect.xreflect.XProperty;
 
 import java.util.HashMap;
 import java.util.List;

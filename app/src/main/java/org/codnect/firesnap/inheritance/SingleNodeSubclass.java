@@ -2,6 +2,7 @@ package org.codnect.firesnap.inheritance;
 
 import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.mapping.Node;
+import org.codnect.firesnap.mapping.SimpleValue;
 
 /**
  * Created by Burak Koken on 20.5.2018.
@@ -26,6 +27,11 @@ public class SingleNodeSubclass extends Subclass {
 
     @Override
     public Node getNode() {
+        return null;
+    }
+
+    @Override
+    public SimpleValue getDiscriminator() {
         return null;
     }
 

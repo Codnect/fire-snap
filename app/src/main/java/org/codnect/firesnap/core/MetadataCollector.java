@@ -9,7 +9,7 @@ import org.codnect.firesnap.mapping.IdGeneratorSecondStep;
 import org.codnect.firesnap.mapping.Node;
 import org.codnect.firesnap.inheritance.PersistentClass;
 import org.codnect.firesnap.mapping.SecondStep;
-import org.codnect.firesnap.reflection.XClass;
+import org.codnect.xreflect.XClass;
 
 import java.util.ArrayList;
 import java.util.Collection;

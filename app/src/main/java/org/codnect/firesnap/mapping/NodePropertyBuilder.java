@@ -7,7 +7,7 @@ import org.codnect.firesnap.annotation.Property;
 import org.codnect.firesnap.binder.ModelBinder;
 import org.codnect.firesnap.core.MetadataContext;
 import org.codnect.firesnap.core.PropertyHolder;
-import org.codnect.firesnap.reflection.XProperty;
+import org.codnect.xreflect.XProperty;
 
 /**
  * Created by Burak Koken on 7.10.2018.

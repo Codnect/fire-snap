@@ -10,8 +10,8 @@ import org.codnect.firesnap.mapping.Node;
 import org.codnect.firesnap.inheritance.PersistentClass;
 import org.codnect.firesnap.inheritance.SingleNodeSubclass;
 import org.codnect.firesnap.mapping.SimpleValue;
-import org.codnect.firesnap.reflection.XClass;
 import org.codnect.firesnap.util.StringHelper;
+import org.codnect.xreflect.XClass;
 
 /**
  * Created by Burak Koken on 14.5.2018.

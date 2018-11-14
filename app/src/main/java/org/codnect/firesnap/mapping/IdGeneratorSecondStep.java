@@ -1,7 +1,7 @@
 package org.codnect.firesnap.mapping;
 
 import org.codnect.firesnap.core.MetadataContext;
-import org.codnect.firesnap.reflection.XProperty;
+import org.codnect.xreflect.XProperty;
 
 /**
  * Created by Burak Koken on 25.10.2018.
@@ -13,6 +13,7 @@ public class IdGeneratorSecondStep implements SecondStep {
     private SimpleValue idPropertyValue;
     private XProperty property;
     private IdGeneratorType idGeneratorType;
+
     private MetadataContext metadataContext;
 
     public IdGeneratorSecondStep(SimpleValue idPropertyValue,
